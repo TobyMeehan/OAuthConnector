@@ -17,7 +17,7 @@ namespace TobyMeehan.OAuth.Data
 
         public IHttpRequest GetAccessTokenWithPkce(string clientId, string redirectUri, string codeVerifier, string authCode)
         {
-            return _client.Post("https://api.tobymeehan.com/oauth/token", new
+            return _client.Post(Config.TokenUrl, new
             {
                 grant_type = "authorization_code",
                 code = authCode,
@@ -29,7 +29,7 @@ namespace TobyMeehan.OAuth.Data
 
         public IHttpRequest GetAccessTokenWithSecret(string clientId, string redirectUri, string secret, string authCode)
         {
-            return _client.Post("https://api.tobymeehan.com/oauth/token", new
+            return _client.Post(Config.TokenUrl, new
             {
                 grant_type = "authorization_code",
                 code = authCode,

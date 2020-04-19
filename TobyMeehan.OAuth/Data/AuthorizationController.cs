@@ -22,7 +22,7 @@ namespace TobyMeehan.OAuth.Data
 
                 listener.Start();
 
-                Process.Start($"https://tobymeehan.com/oauth/authorize?response_type=code&client_id={clientId}&redirect_uri={redirectUri}&state={state}{(codeChallenge != null ? $"&code_challenge={codeChallenge}" : "")}");
+                Process.Start($"{Config.AuthoriseUrl}?response_type=code&client_id={clientId}&redirect_uri={redirectUri}&state={state}{(codeChallenge != null ? $"&code_challenge={codeChallenge}" : "")}");
 
                 HttpListenerContext context = await listener.GetContextAsync();
                 var queryString = context.Request.QueryString;

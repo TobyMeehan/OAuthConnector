@@ -17,7 +17,7 @@ namespace TobyMeehan.OAuth.Data
 
         public IHttpRequest GetUser()
         {
-            return _client.Get("https://api.tobymeehan.com/api/account");
+            return _client.Get($"{Config.ApiUrl}/account");
         }
     }
 }

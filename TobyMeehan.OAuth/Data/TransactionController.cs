@@ -17,12 +17,12 @@ namespace TobyMeehan.OAuth.Data
 
         public IHttpRequest GetTransactions()
         {
-            return _client.Get("https://api.tobymeehan.com/api/transaction");
+            return _client.Get($"{Config.ApiUrl}/transaction");
         }
 
         public IHttpRequest SendTransaction(string description, int amount)
         {
-            return _client.Post("https://api.tobymeehan.com/api/transaction", new
+            return _client.Post($"{Config.ApiUrl}/transaction", new
             {
                 description,
                 amount

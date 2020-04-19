@@ -42,5 +42,46 @@ namespace TobyMeehan.OAuth.Models
 
             return success;
         }
+
+        /// <summary>
+        /// Gets every download created by the user.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IReadOnlyList<Download>> GetDownloadsAsync()
+        {
+            var downloadController = new DownloadController(_client);
+
+            IReadOnlyList<Download> downloads = new List<Download>().AsReadOnly();
+
+            await downloadController.GetDownloads()
+                .OnOK<List<Download>>((result) =>
+                {
+                    downloads = result.AsReadOnly();
+                })
+                .SendAsync();
+
+            return downloads;
+        }
+
+        /// <summary>
+        /// Gets the download with the specified ID, provided the user is an author.
+        /// </summary>
+        /// <param name="id">ID of download to get.</param>
+        /// <returns></returns>
+        public async Task<Download> GetDownloadAsync(string id)
+        {
+            var downloadController = new DownloadController(_client);
+
+            Download download = null;
+
+            await downloadController.GetDownload(id)
+                .OnOK<Download>((result) =>
+                {
+                    download = result;
+                })
+                .SendAsync();
+
+            return download;
+        }
     }
 }

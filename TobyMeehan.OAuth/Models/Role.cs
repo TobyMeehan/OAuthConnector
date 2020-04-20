@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,6 +13,7 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// Name of the role.
         /// </summary>
+        [JsonProperty]
         public string Name { get; set; }
 
     }

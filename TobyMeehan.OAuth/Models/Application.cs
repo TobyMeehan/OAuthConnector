@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// The name of the application.
         /// </summary>
+        [JsonProperty]
         public string Name { get; }
 
         /// <summary>

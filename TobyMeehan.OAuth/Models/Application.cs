@@ -16,7 +16,7 @@ namespace TobyMeehan.OAuth.Models
         /// The name of the application.
         /// </summary>
         [JsonProperty]
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets the scoreboard for the application.

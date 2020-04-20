@@ -14,7 +14,7 @@ namespace TobyMeehan.OAuth.Models
         /// Name of the role.
         /// </summary>
         [JsonProperty]
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
     }
 }

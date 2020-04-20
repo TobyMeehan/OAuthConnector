@@ -14,19 +14,19 @@ namespace TobyMeehan.OAuth.Models
         /// Title of the download.
         /// </summary>
         [JsonProperty]
-        public string Title { get; }
+        public string Title { get; private set; }
 
         /// <summary>
         /// Short description of the download.
         /// </summary>
         [JsonProperty]
-        public string ShortDescription { get; }
+        public string ShortDescription { get; private set; }
 
         /// <summary>
         /// Long description of the download.
         /// </summary>
         [JsonProperty]
-        public string LongDescription { get; }
+        public string LongDescription { get; private set; }
 
     }
 }

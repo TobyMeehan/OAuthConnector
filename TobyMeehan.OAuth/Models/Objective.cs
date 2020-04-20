@@ -16,7 +16,7 @@ namespace TobyMeehan.OAuth.Models
         /// Name of the objective.
         /// </summary>
         [JsonProperty]
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Updates the user's score for this objective. This will not update any parent scoreboard object.

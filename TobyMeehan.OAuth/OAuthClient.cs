@@ -69,16 +69,10 @@ namespace TobyMeehan.OAuth
         {
             await tokenRequest.OnOK<JsonWebToken>((token) =>
             {
-                Console.WriteLine($"Entered block.");
                 _token = token;
-            })
-            .OnBadRequest<object>((result, statusCode, reasonPhrase) =>
-            {
-                _token = new JsonWebToken();
+                HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_token.TokenType, _token.AccessToken);
             })
             .SendAsync();
-
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_token.TokenType, _token.AccessToken);
 
             var accountController = new AccountController(HttpClient);
 

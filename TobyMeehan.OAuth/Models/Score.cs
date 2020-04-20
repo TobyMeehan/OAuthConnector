@@ -14,18 +14,18 @@ namespace TobyMeehan.OAuth.Models
         /// Objective the score belongs to.
         /// </summary>
         [JsonProperty]
-        public Objective Objective { get; }
+        public Objective Objective { get; private set; }
 
         /// <summary>
         /// The user associated with the score.
         /// </summary>
         [JsonProperty]
-        public User User { get; }
+        public User User { get; private set; }
 
         /// <summary>
         /// The value of the score.
         /// </summary>
         [JsonProperty]
-        public int Value { get; }
+        public int Value { get; private set; }
     }
 }

@@ -17,7 +17,7 @@ namespace Tester
 
             Console.WriteLine("Authorising...");
 
-            await _client.SignInAsync(clientId, 6969);
+            await _client.SignInAsync(clientId, 6969, "custom.html");
 
             if (!_client.User.IsSignedIn)
             {

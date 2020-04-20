@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -34,16 +35,23 @@ namespace TobyMeehan.OAuth
         /// <param name="clientId">Client ID of this application.</param>
         /// <param name="port">Port on localhost to expect a request containing an authorization code. This must form the same URL as the redirect URI set for this application.</param>
         /// <returns></returns>
-        public async Task SignInAsync(string clientId, int port)
+        public async Task SignInAsync(string clientId, int port, string customSuccessFilePath = null)
         {
             string codeVerifier = Pkce.GenerateVerifier();
             string codeChallenge = Pkce.ChallengeFromVerifier(codeVerifier);
 
             string redirectUri = $"http://localhost:{port}/";
 
+            Stream responseStream = null;
+
+            if (customSuccessFilePath != null)
+            {
+                responseStream = File.OpenRead(Path.Combine(Directory.GetCurrentDirectory(), customSuccessFilePath));
+            }
+
             var authController = new AuthorizationController();
 
-            string authCode = await authController.GetAuthCode(clientId, redirectUri, codeChallenge);
+            string authCode = await authController.GetAuthCode(clientId, redirectUri, codeChallenge, responseStream);
 
             var tokenController = new TokenController(HttpClient);
 

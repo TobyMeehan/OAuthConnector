@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +11,7 @@ namespace TobyMeehan.OAuth.Data
 {
     class AuthorizationController
     {
-        public async Task<string> GetAuthCode(string clientId, string redirectUri, string codeChallenge = null)
+        public async Task<string> GetAuthCode(string clientId, string redirectUri, string codeChallenge = null, Stream responseStream = null)
         {
             string authCode = null;
             string state = Convert.ToBase64String(new SHA256Managed().ComputeHash(Encoding.UTF8.GetBytes(Environment.UserName)));
@@ -30,10 +31,15 @@ namespace TobyMeehan.OAuth.Data
                 authCode = queryString["code"];
                 returnedState = queryString["state"];
 
-                string responseString = "<html><body>Authorisation successful. You can now close this tab.</body></html>";
-                byte[] buffer = Encoding.UTF8.GetBytes(responseString);
-                context.Response.ContentLength64 = buffer.Length;
-                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+                if (responseStream == null)
+                {
+                    string responseString = "<html><body>Authorisation successful. You can now close this tab.</body></html>";
+                    byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+                    responseStream = new MemoryStream(buffer);
+                }
+
+                context.Response.ContentLength64 = responseStream.Length;
+                await responseStream.CopyToAsync(context.Response.OutputStream);
                 context.Response.OutputStream.Close();
 
                 listener.Stop();

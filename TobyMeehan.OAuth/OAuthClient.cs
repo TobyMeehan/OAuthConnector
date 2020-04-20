@@ -23,7 +23,7 @@ namespace TobyMeehan.OAuth
 
         internal static HttpClient HttpClient { get; set; }
 
-        public Application Application { get; }
+        public Application Application { get; private set; }
         public AuthenticatedUser User { get; } = new AuthenticatedUser();
 
         private JsonWebToken _token;
@@ -80,6 +80,15 @@ namespace TobyMeehan.OAuth
                 .OnOK<User>((user) =>
                 {
                     User.SignIn(user.Id, user.Username, _token.AccessToken);
+                })
+                .SendAsync();
+
+            var applicationController = new ApplicationController(HttpClient);
+
+            await applicationController.GetApplication()
+                .OnOK<Application>((app) =>
+                {
+                    Application = app;
                 })
                 .SendAsync();
         }

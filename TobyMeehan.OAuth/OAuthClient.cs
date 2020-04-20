@@ -24,7 +24,14 @@ namespace TobyMeehan.OAuth
 
         internal static HttpClient HttpClient { get; set; }
 
+        /// <summary>
+        /// The current registered application.
+        /// </summary>
         public Application Application { get; private set; }
+
+        /// <summary>
+        /// The current authenticated user.
+        /// </summary>
         public AuthenticatedUser User { get; } = new AuthenticatedUser();
 
         private JsonWebToken _token;
@@ -34,6 +41,7 @@ namespace TobyMeehan.OAuth
         /// </summary>
         /// <param name="clientId">Client ID of this application.</param>
         /// <param name="port">Port on localhost to expect a request containing an authorization code. This must form the same URL as the redirect URI set for this application.</param>
+        /// <param name="customSuccessFilePath">Path of custom HTML file to display when authorisation succeeds, relative to the path of the application.</param>
         /// <returns></returns>
         public async Task SignInAsync(string clientId, int port, string customSuccessFilePath = null)
         {

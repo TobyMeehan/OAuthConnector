@@ -2,10 +2,32 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Toby Meehan</Authors>
+    <Product>OAuth Connector</Product>
+    <Description>.NET Client library for connecting to my OAuth API.</Description>
+    <Copyright>Copyright © 2020 Toby Meehan</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/TobyMeehan/OAuthConnector</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags />
+    <PackageProjectUrl>https://github.com/TobyMeehan/OAuthConnector</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\source\OAuthConnector\TobyMeehan.OAuth\TobyMeehan.OAuth.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="TobyMeehan.Http" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -24,7 +24,7 @@ namespace TobyMeehan.OAuth
         internal static HttpClient HttpClient { get; set; }
 
         public Application Application { get; }
-        public AuthenticatedUser User { get; }
+        public AuthenticatedUser User { get; } = new AuthenticatedUser();
 
         private JsonWebToken _token;
 
@@ -39,7 +39,7 @@ namespace TobyMeehan.OAuth
             string codeVerifier = Pkce.GenerateVerifier();
             string codeChallenge = Pkce.ChallengeFromVerifier(codeVerifier);
 
-            string redirectUri = $"https://localhost:{port}";
+            string redirectUri = $"http://localhost:{port}/";
 
             var authController = new AuthorizationController();
 
@@ -69,6 +69,7 @@ namespace TobyMeehan.OAuth
         {
             await tokenRequest.OnOK<JsonWebToken>((token) =>
             {
+                Console.WriteLine($"Entered block.");
                 _token = token;
             })
             .OnBadRequest<object>((result, statusCode, reasonPhrase) =>

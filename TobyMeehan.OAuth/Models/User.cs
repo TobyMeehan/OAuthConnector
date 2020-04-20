@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -15,6 +16,7 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// The username of the user.
         /// </summary>
+        [JsonProperty]
         public string Username { get; protected set; }
 
         /// <summary>

@@ -32,6 +32,7 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// The user's balance.
         /// </summary>
+        [JsonProperty]
         public int Balance { get; private set; }
 
         public override async Task<bool> TrySendTransactionAsync(string description, int amount)

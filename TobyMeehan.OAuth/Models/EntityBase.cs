@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -20,6 +21,7 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// Internal ID of the entity.
         /// </summary>
+        [JsonProperty]
         public string Id { get; protected set; }
 
         public override bool Equals(object obj)

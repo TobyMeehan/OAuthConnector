@@ -12,6 +12,8 @@ Before you can use the library you need to have an application registered at [ap
 Once your application is registered, you are given a client ID, which you can use to authorise with the API.
 
 ## Usage
+There is more detailed documentation available in the [Wiki](https://github.com/TobyMeehan/OAuthConnector/wiki), which covers every class, and explains the usage of the scoreboard and transactions. The example below demonstrates getting a user signed into a desktop application.
+
 All functionality is exposed through the `OAuthClient` class. There should be a single instance of this class available to all parts of your application, so implement as a singleton in DI, or as a static member somewhere.
 
 To authenticate a user, use the `SignInAsync` method of the client. There are various overloads for different grant and response types. This example demonstrates the PKCE extension for native (desktop) clients.

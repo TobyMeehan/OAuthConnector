@@ -12,35 +12,18 @@ Before you can use the library you need to have an application registered at [ap
 Once your application is registered, you are given a client ID, which you can use to authorise with the API.
 
 ## Usage
-There is more detailed documentation available in the [Wiki](https://github.com/TobyMeehan/OAuthConnector/wiki), which covers every class, and explains the usage of the scoreboard and transactions. The example below demonstrates getting a user signed into a desktop application.
+For documentation on using the connector, see the [Wiki](https://github.com/TobyMeehan/OAuthConnector/wiki), which covers every class, and explains the usage of the scoreboard and transactions.
 
-All functionality is exposed through the `OAuthClient` class. There should be a single instance of this class available to all parts of your application, so implement as a singleton in DI, or as a static member somewhere.
+## Versioning
+Versions follow the semantic versioning standard of MAJOR.MINOR.PATCH, however due to the library being inherently linked to versions of the API, there are extra considerations.
 
-To authenticate a user, use the `SignInAsync` method of the client. There are various overloads for different grant and response types. This example demonstrates the PKCE extension for native (desktop) clients.
+- If the API is updated in such a way that means incompatible changes must be made to the library, the major version will be incremented.
+- If the API is updated such that endpoints change, but underlying functionality remains the same, the minor version will be incremented.
+- If the API is extended, such that existing functionality remains the same, but new functionality is introduced, the minor version will be incremented.
 
-```cs
-static class Foo
-{
-    public static OAuthClient Client { get; set; } = new OAuthClient();
-}
+This means that, for the most part, the major version of this library corresponds to the major version of the API, but the minor versions **do not** necessarily correspond. Note that the API is 1 major version ahead of this library.
 
-class Program
-{
-    static async Task Main(string[] args)
-    {
-        string clientId = "your-client-id";
-        int port = 5000 // This is the port if your registered Redirect URI was http://localhost:5000.
-    
-        await Foo.Client.SignInAsync(clientId, port);
-        
-        if (Foo.Client.User.IsSignedIn)
-        {
-            Console.WriteLine("Authenticated.");
-        }
-    }
-}
-```
+To follow versions and changes to the API, see my [Website](https://github.com/TobyMeehan/Website) repo.
 
-In a production application, do not include the port or client ID directly in source code, instead use configuration or some key vault.
-
-The `SignInAsync` method is designed to fail gracefully, meaning if authorisation fails for any reason, rather than blowing up, it will simply exit. Hence, after calling the method, use `User.IsSignedIn` to check whether authorisation succeeded. If it did, congratulations! You can start actually making use of the API.
+## Issues
+If you experience any problems using the connector, such as bugs or some code you're not sure about, please create an [issue](https://github.com/TobyMeehan/OAuthConnector/issues) so you can get reasonably fast support. Also, if I come across anything that needs fixing, I will create an issue myself, so you can see if it's a known issue and/or if there is a fix.

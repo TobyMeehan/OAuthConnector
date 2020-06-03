@@ -1,32 +1,30 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TobyMeehan.OAuth.Collections;
 
 namespace TobyMeehan.OAuth.Models
 {
-    /// <summary>
-    /// Class representing a download.
-    /// </summary>
     public class Download : EntityBase
     {
         /// <summary>
         /// Title of the download.
         /// </summary>
-        [JsonProperty]
-        public string Title { get; private set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Short description of the download.
         /// </summary>
-        [JsonProperty]
-        public string ShortDescription { get; private set; }
+        public string ShortDescription { get; set; }
 
         /// <summary>
         /// Long description of the download.
         /// </summary>
-        [JsonProperty]
-        public string LongDescription { get; private set; }
+        public string LongDescription { get; set; }
 
+        /// <summary>
+        /// The download's authors.
+        /// </summary>
+        public IRepository<DownloadAuthor> Authors { get; set; }
     }
 }

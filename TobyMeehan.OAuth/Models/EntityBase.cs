@@ -9,7 +9,7 @@ namespace TobyMeehan.OAuth.Models
     /// <summary>
     /// Base class representing an entity.
     /// </summary>
-    public abstract class EntityBase
+    public abstract class EntityBase : IEntity
     {
         protected readonly HttpClient _client;
 

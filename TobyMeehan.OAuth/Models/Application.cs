@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
-using TobyMeehan.OAuth.Data;
+using TobyMeehan.OAuth.Collections;
 
 namespace TobyMeehan.OAuth.Models
 {
@@ -15,27 +13,11 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// The name of the application.
         /// </summary>
-        [JsonProperty]
         public string Name { get; private set; }
 
         /// <summary>
-        /// Gets the scoreboard for the application.
+        /// The application's scoreboard.
         /// </summary>
-        /// <returns></returns>
-        public async Task<Scoreboard> GetScoreboardAsync()
-        {
-            var scoreboardController = new ScoreboardController(_client);
-
-            Scoreboard scoreboard = null;
-
-            await scoreboardController.GetScoreboard()
-                .OnOK<Scoreboard>((result) =>
-                {
-                    scoreboard = result;
-                })
-                .SendAsync();
-
-            return scoreboard;
-        }
+        public IEntityCollection<Objective> Scoreboard { get; private set; }
     }
 }

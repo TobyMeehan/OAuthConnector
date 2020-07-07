@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace TobyMeehan.OAuth
 {
     public class ApiVersion
     {
-        public static ApiVersion Version2
+        public static ApiVersion Version1
         {
             get
             {
@@ -15,26 +16,38 @@ namespace TobyMeehan.OAuth
 
                 return new ApiVersion
                 {
-                    Url = url,
-                    AuthoriseUrl = authoriseUrl,
                     Endpoints =
                     {
-                        {"authorize", $"{authoriseUrl}/authorize" },
-                        {"token", $"{authoriseUrl}/token" },
-                        {"account", $"{url}/account" },
-                        {"application", $"{url}/application" },
-                        {"download", $"{url}/download" },
-                        {"scoreboard", $"{url}/scoreboard" },
-                        {"transaction", $"{url}/transaction" }
+                        {Endpoint.Authorize, $"{authoriseUrl}/authorize" },
+                        {Endpoint.Token, $"{authoriseUrl}/token" },
+                        {Endpoint.Account, $"{url}/account" },
+                        {Endpoint.Application, $"{url}/application" },
+                        {Endpoint.Download, $"{url}/download" },
+                        {Endpoint.Transaction, $"{url}/transaction" },
+                        {Endpoint.Scoreboard, $"{url}/scoreboard" },
+                        {Endpoint.Objective, $"{url}/scoreboard/objective" },
+                        {Endpoint.Score, $"{url}/scoreboard/score" }
                     }
                 };
             }
         }
 
 
-        public string Url { get; set; }
-        public string AuthoriseUrl { get; set; }
-        public Dictionary<string, string> Endpoints { get; set; }
+        public Dictionary<Endpoint, string> Endpoints { get; set; }
 
+        public string Url(Endpoint endpoint) => Endpoints[endpoint];
+    }
+
+    public enum Endpoint
+    {
+        Authorize,
+        Token,
+        Account,
+        Application,
+        Download,
+        Transaction,
+        Scoreboard,
+        Objective,
+        Score
     }
 }

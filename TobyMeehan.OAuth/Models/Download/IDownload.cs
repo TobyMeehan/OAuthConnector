@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TobyMeehan.OAuth.Collections;
 
 namespace TobyMeehan.OAuth.Models
 {
-    public class Download : EntityBase
+    /// <summary>
+    /// Interface representing a download.
+    /// </summary>
+    public interface IDownload : IEntity
     {
         /// <summary>
         /// Title of the download.
         /// </summary>
-        public string Title { get; set; }
+        string Title { get; }
 
         /// <summary>
         /// Short description of the download.
         /// </summary>
-        public string ShortDescription { get; set; }
+        string ShortDescription { get; }
 
         /// <summary>
         /// Long description of the download.
         /// </summary>
-        public string LongDescription { get; set; }
-
-        /// <summary>
-        /// The download's authors.
-        /// </summary>
-        public IRepository<DownloadAuthor> Authors { get; set; }
+        string LongDescription { get; }
     }
 }

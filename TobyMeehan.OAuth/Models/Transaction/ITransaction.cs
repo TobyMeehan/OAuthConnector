@@ -5,28 +5,28 @@ using System.Text;
 namespace TobyMeehan.OAuth.Models
 {
     /// <summary>
-    /// Class representing a transaction.
+    /// Interface representing a transaction.
     /// </summary>
-    public class Transaction : EntityBase
+    public interface ITransaction : IEntity
     {
         /// <summary>
         /// The application that sent the transaction.
         /// </summary>
-        public Application Sender { get; private set; }
+        IApplication Sender { get; }
 
         /// <summary>
         /// The user the transaction was sent to.
         /// </summary>
-        public User User { get; private set; }
+        IUser User { get; }
 
         /// <summary>
-        /// Extra detail about the transaction.
+        /// Additional detail about the transaction.
         /// </summary>
-        public string Description { get; private set; }
+        string Description { get; }
 
         /// <summary>
         /// The amount the transaction changed the user's balance.
         /// </summary>
-        public int Amount { get; private set; }
+        int Amount { get; }
     }
 }

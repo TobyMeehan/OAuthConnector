@@ -5,13 +5,13 @@ using System.Text;
 namespace TobyMeehan.OAuth.Models
 {
     /// <summary>
-    /// Class representing a user role.
+    /// Interface representing an OAuth application.
     /// </summary>
-    public class Role : EntityBase
+    public interface IApplication : IEntity
     {
         /// <summary>
-        /// Name of the role.
+        /// The name of the application.
         /// </summary>
-        public string Name { get; private set; }
+        string Name { get; }
     }
 }

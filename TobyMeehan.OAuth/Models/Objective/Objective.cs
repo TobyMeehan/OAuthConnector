@@ -8,5 +8,10 @@ namespace TobyMeehan.OAuth.Models
     
     public class Objective : ObjectiveBase, IObjective
     {
+        public Objective(ObjectiveBase objective)
+        {
+            Id = objective.Id;
+            Name = objective.Name;
+        }
     }
 }

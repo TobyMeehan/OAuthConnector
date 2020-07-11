@@ -7,5 +7,10 @@ namespace TobyMeehan.OAuth.Models
 {
     public class Application : ApplicationBase, IApplication
     {
+        public Application(ApplicationBase application)
+        {
+            Id = application.Id;
+            Name = application.Name;
+        }
     }
 }

@@ -5,9 +5,13 @@ using TobyMeehan.OAuth.Collections;
 
 namespace TobyMeehan.OAuth.Models
 {
-    
     public class User : UserBase, IUser
     {
-
+        public User(UserBase user)
+        {
+            Id = user.Id;
+            Username = user.Username;
+            Balance = user.Balance;
+        }
     }
 }

@@ -9,6 +9,16 @@ namespace TobyMeehan.OAuth.Collections
 {
     public class EntityCollection<T> : IEntityCollection<T> where T : IEntity
     {
+        public EntityCollection()
+        {
+
+        }
+
+        public EntityCollection(IEnumerable<T> collection)
+        {
+            _items = collection.ToList();
+        }
+
         private List<T> _items = new List<T>();
 
         public T this[string id] => _items.Single(x => x.Id == id);

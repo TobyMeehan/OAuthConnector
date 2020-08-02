@@ -6,43 +6,15 @@ using System.Text;
 
 namespace TobyMeehan.OAuth.Http
 {
-    public class HttpResult : IDisposable
+    public class HttpResult : IHttpResult
     {
-        public HttpResult(HttpResponseMessage response)
+        public HttpResult(HttpStatusCode statusCode, string body)
         {
-            Response = response;
+            StatusCode = statusCode;
+            Body = body;
         }
 
-        public HttpStatusCode StatusCode => Response.StatusCode;
-        public bool IsSuccessStatusCode => Response.IsSuccessStatusCode;
-
-        public HttpResponseMessage Response { get; }
-
-        public HttpResult<T> AddData<T>(T data)
-        {
-            return new HttpResult<T>(Response, data);
-        }
-
-        public virtual void Dispose()
-        {
-            Response.Dispose();
-        }
-    }
-
-    public class HttpResult<T> : HttpResult
-    {
-        public HttpResult(HttpResponseMessage response, T data) : base(response)
-        {
-            Data = data;
-        }
-
-        public T Data { get; set; }
-
-        public override void Dispose()
-        {
-            Data = null;
-
-            base.Dispose();
-        }
+        public string Body { get; }
+        public HttpStatusCode StatusCode { get; }
     }
 }

@@ -57,5 +57,37 @@ namespace TobyMeehan.OAuth.Controllers
 
             throw new Exception();
         }
+
+        public async Task<IEntityCollection<IDownload>> GetDownloadsAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var result = await _http.GetAsync<List<DownloadBase>>($"/users/{id}/downloads", cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<List<DownloadBase>> downloads)
+            {
+                return downloads.Data.ToEntityCollection<IDownload, DownloadBase>(download => new Download(download));
+            }
+
+            throw new Exception();
+        }
+
+        public async Task LeaveDownloadAsync(string id, string downloadId, CancellationToken cancellationToken = default)
+        {
+            var result = await _http.DeleteAsync($"/users/{id}/downloads/{downloadId}", cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                if (error.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return;
+                }
+
+                throw new ApiException(error);
+            }
+        }
     }
 }

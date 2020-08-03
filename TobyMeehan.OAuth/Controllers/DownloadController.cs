@@ -90,5 +90,22 @@ namespace TobyMeehan.OAuth.Controllers
                 throw new ApiException(error);
             }
         }
+
+        public async Task<IEntityCollection<IUser>> GetAuthorsAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var result = await _http.GetAsync<List<UserBase>>($"/downloads/{id}/authors", cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<List<UserBase>> users)
+            {
+                return users.Data.ToEntityCollection<IUser, UserBase>(user => new User(user));
+            }
+
+            throw new Exception();
+        }
     }
 }

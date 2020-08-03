@@ -33,4 +33,17 @@ namespace TobyMeehan.OAuth.Collections
             return GetEnumerator();
         }
     }
+
+    public static class EnumerableExtensions
+    {
+        public static IEntityCollection<T> ToEntityCollection<T>(this IEnumerable<T> collection) where T : IEntity
+        {
+            return new EntityCollection<T>(collection);
+        }
+
+        public static IEntityCollection<T> ToEntityCollection<T, TSource>(this IEnumerable<TSource> collection, Func<TSource, T> map) where T : IEntity
+        {
+            return new EntityCollection<T>(collection.Select(map));
+        }
+    }
 }

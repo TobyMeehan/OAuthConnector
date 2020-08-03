@@ -13,5 +13,20 @@ namespace TobyMeehan.OAuth.Models
         /// The name of the application.
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// The author of the application.
+        /// </summary>
+        IUser User { get; }
+
+        /// <summary>
+        /// A description of the application.
+        /// </summary>
+        string Description { get; }
+
+        /// <summary>
+        /// The URL of the application's icon image.
+        /// </summary>
+        string IconUrl { get; }
     }
 }

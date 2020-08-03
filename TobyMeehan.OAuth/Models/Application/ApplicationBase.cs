@@ -7,5 +7,9 @@ namespace TobyMeehan.OAuth.Models
     public class ApplicationBase : EntityBase
     {
         public string Name { get; set; }
+        public string UserId { get; set; }
+        public UserBase User { get; set; }
+        public string Description { get; set; }
+        public string IconUrl { get; set; }
     }
 }

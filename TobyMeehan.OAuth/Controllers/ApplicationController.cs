@@ -1,29 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
+using System.Net;
 using System.Text;
-using TobyMeehan.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using TobyMeehan.OAuth.Http;
+using TobyMeehan.OAuth.Models;
 
 namespace TobyMeehan.OAuth.Controllers
 {
     public class ApplicationController : IApplicationController
     {
-        private readonly HttpClient _client;
-        private readonly ApiVersion _version;
+        private readonly IHttp _http;
 
-        public ApplicationController(HttpClient client, ApiVersion version)
+        public ApplicationController(IHttp http)
         {
-            _client = client;
-            _version = version;
+            _http = http;
         }
 
-        public IHttpRequest Get()
+        public async Task<IApplication> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            return _client.Get(_version.Url(Endpoint.Application))
-                .OnBadRequest(statusCode =>
+            var result = await _http.GetAsync<ApplicationBase>($"/applications/{id}", cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                if (error.StatusCode == HttpStatusCode.NotFound)
                 {
-                    throw new ApiException(statusCode);
-                });
+                    return null;
+                }
+
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<ApplicationBase> application)
+            {
+                return new Application(application.Data);
+            }
+
+            throw new Exception();
         }
     }
 }

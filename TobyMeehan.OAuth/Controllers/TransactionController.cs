@@ -1,42 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
+using System.Net;
 using System.Text;
-using TobyMeehan.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using TobyMeehan.OAuth.Collections;
+using TobyMeehan.OAuth.Http;
+using TobyMeehan.OAuth.Models;
 
 namespace TobyMeehan.OAuth.Controllers
 {
     public class TransactionController : ITransactionController
     {
-        private readonly HttpClient _client;
-        private readonly ApiVersion _version;
+        private readonly IHttp _http;
 
-        public TransactionController(HttpClient client, ApiVersion version)
+        public TransactionController(IHttp http)
         {
-            _client = client;
-            _version = version;
+            _http = http;
         }
 
-        public IHttpRequest Get()
+        public async Task<IEntityCollection<ITransaction>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return _client.Get(_version.Url(Endpoint.Transaction))
-                .OnBadRequest(statusCode =>
-                {
-                    throw new ApiException(statusCode);
-                });
-        }
+            var result = await _http.GetAsync<List<TransactionBase>>($"/users/@me/transactions", cancellationToken);
 
-        public IHttpRequest Post(string description, int amount)
-        {
-            return _client.Post(_version.Url(Endpoint.Transaction), new
+            if (result is IErrorHttpResult error)
             {
-                description,
-                amount
-            })
-                .OnBadRequest(statusCode =>
-                {
-                    throw new ApiException(statusCode);
-                });
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<List<TransactionBase>> transaction)
+            {
+                return transaction.Data.ToEntityCollection<ITransaction, TransactionBase>(x => new Transaction(x));
+            }
+
+            throw new Exception();
+        }
+
+        public async Task<ITransaction> PostAsync(string description, int amount, bool allowNegative, CancellationToken cancellationToken = default)
+        {
+            var result = await _http.PostAsync<TransactionBase>($"/users/@me/transactions?allowNegative={allowNegative}", new
+            {
+                Description = description,
+                Amount = amount
+            }, cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<TransactionBase> transaction)
+            {
+                return new Transaction(transaction.Data);
+            }
+
+            throw new Exception();
         }
     }
 }

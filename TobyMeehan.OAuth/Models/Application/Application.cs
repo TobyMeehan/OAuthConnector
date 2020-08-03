@@ -11,6 +11,11 @@ namespace TobyMeehan.OAuth.Models
         {
             Id = application.Id;
             Name = application.Name;
+            Description = application.Description;
+            IconUrl = application.IconUrl;
+            User = new User(application.User);
         }
+
+        public new IUser User { get; set; }
     }
 }

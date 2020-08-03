@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TobyMeehan.OAuth.Collections;
 using TobyMeehan.OAuth.Http;
 using TobyMeehan.OAuth.Models;
 
@@ -16,6 +17,23 @@ namespace TobyMeehan.OAuth.Controllers
         public UserController(IHttp http)
         {
             _http = http;
+        }
+
+        public async Task<IEntityCollection<IUser>> GetAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await _http.GetAsync<List<UserBase>>("/users", cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<List<UserBase>> users)
+            {
+                return users.Data.ToEntityCollection<IUser, UserBase>(user => new User(user));
+            }
+
+            throw new Exception();
         }
 
         public async Task<IUser> GetAsync(string id, CancellationToken cancellationToken = default)

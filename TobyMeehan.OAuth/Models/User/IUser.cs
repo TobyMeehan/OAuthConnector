@@ -8,12 +8,8 @@ namespace TobyMeehan.OAuth.Models
     /// <summary>
     /// Interface representing a user.
     /// </summary>
-    public interface IUser : IEntity
+    public interface IUser : IPartialUser
     {
-        /// <summary>
-        /// The user's username.
-        /// </summary>
-        string Username { get; }
 
         /// <summary>
         /// The user's balance.

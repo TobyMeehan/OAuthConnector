@@ -7,7 +7,7 @@ namespace TobyMeehan.OAuth.Models
     /// <summary>
     /// Class representing a scoreboard score.
     /// </summary>
-    public interface IScore : IEntity
+    public interface IScore
     {
         /// <summary>
         /// The value of the score.
@@ -15,13 +15,8 @@ namespace TobyMeehan.OAuth.Models
         int Value { get; }
 
         /// <summary>
-        /// Objective the score belongs to.
-        /// </summary>
-        IObjective Objective { get; }
-
-        /// <summary>
         /// The user associated with the score.
         /// </summary>
-        IUser User { get; }
+        IPartialUser User { get; }
     }
 }

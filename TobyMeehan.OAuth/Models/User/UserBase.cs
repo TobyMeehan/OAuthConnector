@@ -9,5 +9,7 @@ namespace TobyMeehan.OAuth.Models
         public string Username { get; set; }
         
         public int Balance { get; set; }
+
+        public List<RoleBase> Roles { get; set; }
     }
 }

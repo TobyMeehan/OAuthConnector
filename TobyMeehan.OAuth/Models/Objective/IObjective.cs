@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TobyMeehan.OAuth.Collections;
 
 namespace TobyMeehan.OAuth.Models
 {
@@ -13,5 +14,10 @@ namespace TobyMeehan.OAuth.Models
         /// The name of the objective.
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// The scores in the objective.
+        /// </summary>
+        IScoreCollection Scores { get; }
     }
 }

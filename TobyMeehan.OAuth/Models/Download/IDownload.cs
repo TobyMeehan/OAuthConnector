@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TobyMeehan.OAuth.Collections;
 
 namespace TobyMeehan.OAuth.Models
 {
@@ -23,5 +24,10 @@ namespace TobyMeehan.OAuth.Models
         /// Long description of the download.
         /// </summary>
         string LongDescription { get; }
+
+        /// <summary>
+        /// The download's authors.
+        /// </summary>
+        IEntityCollection<IPartialUser> Authors { get; }
     }
 }

@@ -15,5 +15,10 @@ namespace TobyMeehan.OAuth.Models
         /// The user's balance.
         /// </summary>
         int Balance { get; }
+
+        /// <summary>
+        /// The user's transaction history.
+        /// </summary>
+        IEntityCollection<ITransaction> Transactions { get; }
     }
 }

@@ -10,5 +10,7 @@ namespace TobyMeehan.OAuth.Models
         string Username { get; }
         
         IEntityCollection<IRole> Roles { get; }
+
+        IEntityCollection<IDownload> Downloads { get; }
     }
 }

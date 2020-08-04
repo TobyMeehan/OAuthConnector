@@ -1,18 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using TobyMeehan.OAuth.Collections;
+using TobyMeehan.OAuth.Controllers;
 
 namespace TobyMeehan.OAuth.Models
 {
     public class Download : DownloadBase, IDownload
     {
-        public Download(DownloadBase download)
+        private readonly IDownloadController _controller;
+
+        public Download(IDownloadController controller)
         {
-            Id = download.Id;
-            Title = download.Title;
-            ShortDescription = download.ShortDescription;
-            LongDescription = download.LongDescription;
+            _controller = controller;
         }
+
+        public static async Task<Download> CreateAsync(DownloadBase @base, IDownloadController controller, CancellationToken cancellationToken)
+        {
+            var download = new Download(controller)
+            {
+                Id = @base.Id,
+                Title = @base.Title,
+                ShortDescription = @base.ShortDescription,
+                LongDescription = @base.LongDescription
+            };
+
+            download.Authors = await controller.GetAuthorsAsync(@base.Id, cancellationToken);
+
+            return download;
+        }
+
+        public static async Task<IEntityCollection<IDownload>> CreateCollectionAsync(IEnumerable<DownloadBase> collection, IDownloadController controller, CancellationToken cancellationToken)
+        {
+            var entityCollection = new EntityCollection<IDownload>();
+
+            foreach (var download in collection)
+            {
+                entityCollection.Add(await CreateAsync(download, controller, cancellationToken));
+            }
+
+            return entityCollection;
+        }
+
+        public new IEntityCollection<IPartialUser> Authors { get; set; }
     }
 }

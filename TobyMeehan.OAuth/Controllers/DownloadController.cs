@@ -14,10 +14,12 @@ namespace TobyMeehan.OAuth.Controllers
     public class DownloadController : IDownloadController
     {
         private readonly IHttp _http;
+        private readonly ControllerService _service;
 
-        public DownloadController(IHttp http)
+        public DownloadController(IHttp http, ControllerService service)
         {
             _http = http;
+            _service = service;
         }
 
         public async Task<IEntityCollection<IDownload>> GetAsync(CancellationToken cancellationToken = default)
@@ -31,7 +33,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<DownloadBase>> downloads)
             {
-                return new EntityCollection<IDownload>(downloads.Data.Select(download => new Download(download)));
+                return await Download.CreateCollectionAsync(downloads.Data, this, cancellationToken);
             }
 
             throw new Exception();
@@ -53,7 +55,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<DownloadBase> download)
             {
-                return new Download(download.Data);
+                return await Download.CreateAsync(download.Data, this, cancellationToken);
             }
 
             throw new Exception();
@@ -75,7 +77,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<DownloadBase> download)
             {
-                return new Download(download.Data);
+                return await Download.CreateAsync(download.Data, this, cancellationToken);
             }
 
             throw new Exception();
@@ -91,7 +93,7 @@ namespace TobyMeehan.OAuth.Controllers
             }
         }
 
-        public async Task<IEntityCollection<IUser>> GetAuthorsAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<IEntityCollection<IPartialUser>> GetAuthorsAsync(string id, CancellationToken cancellationToken = default)
         {
             var result = await _http.GetAsync<List<UserBase>>($"/downloads/{id}/authors", cancellationToken);
 
@@ -102,7 +104,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<UserBase>> users)
             {
-                return users.Data.ToEntityCollection<IUser, UserBase>(user => new User(user));
+                return await User.CreateCollectionAsync<IPartialUser>(users.Data, _service.Users, cancellationToken);
             }
 
             throw new Exception();

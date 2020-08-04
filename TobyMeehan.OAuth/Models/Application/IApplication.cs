@@ -15,11 +15,6 @@ namespace TobyMeehan.OAuth.Models
         string Name { get; }
 
         /// <summary>
-        /// The author of the application.
-        /// </summary>
-        IUser User { get; }
-
-        /// <summary>
         /// A description of the application.
         /// </summary>
         string Description { get; }

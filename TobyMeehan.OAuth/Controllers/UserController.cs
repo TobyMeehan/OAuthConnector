@@ -89,5 +89,43 @@ namespace TobyMeehan.OAuth.Controllers
                 throw new ApiException(error);
             }
         }
+
+        public async Task<IEntityCollection<ITransaction>> GetTransactionsAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var result = await _http.GetAsync<List<TransactionBase>>($"/users/{id}/transactions", cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<List<TransactionBase>> transaction)
+            {
+                return transaction.Data.ToEntityCollection<ITransaction, TransactionBase>(x => new Transaction(x));
+            }
+
+            throw new Exception();
+        }
+
+        public async Task<ITransaction> PostTransactionAsync(string id, string description, int amount, bool allowNegative, CancellationToken cancellationToken = default)
+        {
+            var result = await _http.PostAsync<TransactionBase>($"/users/{id}/transactions?allowNegative={allowNegative}", new
+            {
+                Description = description,
+                Amount = amount
+            }, cancellationToken);
+
+            if (result is IErrorHttpResult error)
+            {
+                throw new ApiException(error);
+            }
+
+            if (result is IHttpResult<TransactionBase> transaction)
+            {
+                return new Transaction(transaction.Data);
+            }
+
+            throw new Exception();
+        }
     }
 }

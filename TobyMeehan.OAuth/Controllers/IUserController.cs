@@ -11,5 +11,7 @@ namespace TobyMeehan.OAuth.Controllers
         Task<IUser> GetAsync(string id, CancellationToken cancellationToken = default);
         Task<IEntityCollection<IDownload>> GetDownloadsAsync(string id, CancellationToken cancellationToken = default);
         Task LeaveDownloadAsync(string id, string downloadId, CancellationToken cancellationToken = default);
+        Task<IEntityCollection<ITransaction>> GetTransactionsAsync(string id, CancellationToken cancellationToken = default);
+        Task<ITransaction> PostTransactionAsync(string id, string description, int amount, bool allowNegative, CancellationToken cancellationToken = default);
     }
 }

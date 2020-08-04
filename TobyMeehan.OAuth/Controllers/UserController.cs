@@ -23,7 +23,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IEntityCollection<IUser>> GetAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<UserBase>>("/users", cancellationToken);
+            var result = await _http.GetAsync<List<UserBase>>("/api/users", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -40,7 +40,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IUser> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<UserBase>($"/users/{id}", cancellationToken);
+            var result = await _http.GetAsync<UserBase>($"/api/users/{id}", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -62,7 +62,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IEntityCollection<IDownload>> GetDownloadsAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<DownloadBase>>($"/users/{id}/downloads", cancellationToken);
+            var result = await _http.GetAsync<List<DownloadBase>>($"/api/users/{id}/downloads", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -79,7 +79,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task LeaveDownloadAsync(string id, string downloadId, CancellationToken cancellationToken = default)
         {
-            var result = await _http.DeleteAsync($"/users/{id}/downloads/{downloadId}", cancellationToken);
+            var result = await _http.DeleteAsync($"/api/users/{id}/downloads/{downloadId}", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -94,7 +94,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IEntityCollection<ITransaction>> GetTransactionsAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<TransactionBase>>($"/users/{id}/transactions", cancellationToken);
+            var result = await _http.GetAsync<List<TransactionBase>>($"/api/users/{id}/transactions", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -111,7 +111,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<ITransaction> PostTransactionAsync(string id, string description, int amount, bool allowNegative, CancellationToken cancellationToken = default)
         {
-            var result = await _http.PostAsync<TransactionBase>($"/users/{id}/transactions?allowNegative={allowNegative}", new
+            var result = await _http.PostAsync<TransactionBase>($"/api/users/{id}/transactions?allowNegative={allowNegative}", new
             {
                 Description = description,
                 Amount = amount

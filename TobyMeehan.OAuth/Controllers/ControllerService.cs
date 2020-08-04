@@ -9,7 +9,8 @@ namespace TobyMeehan.OAuth.Controllers
         public IApplicationController Applications { get; set; }
         public IDownloadController Downloads { get; set; }
         public IScoreboardController Scoreboard { get; set; }
-        public ITransactionController Transactions { get; set; }
         public IUserController Users { get; set; }
+
+        public ITokenController Token { get; set; }
     }
 }

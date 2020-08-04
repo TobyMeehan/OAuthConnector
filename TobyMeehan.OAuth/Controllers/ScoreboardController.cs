@@ -21,7 +21,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IEntityCollection<IObjective>> GetAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<ObjectiveBase>>("/applications/@me/scoreboard", cancellationToken);
+            var result = await _http.GetAsync<List<ObjectiveBase>>("/api/applications/@me/scoreboard", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -38,7 +38,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IObjective> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<ObjectiveBase>($"/applications/@me/scoreboard/{id}", cancellationToken);
+            var result = await _http.GetAsync<ObjectiveBase>($"/api/applications/@me/scoreboard/{id}", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -60,7 +60,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IObjective> PostAsync(string name, CancellationToken cancellationToken = default)
         {
-            var result = await _http.PostAsync<ObjectiveBase>("/applications/@me/scoreboard", new
+            var result = await _http.PostAsync<ObjectiveBase>("/api/applications/@me/scoreboard", new
             {
                 Name = name
             }, cancellationToken);
@@ -80,7 +80,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.DeleteAsync($"/applications/@me/scoreboard/{id}", cancellationToken);
+            var result = await _http.DeleteAsync($"/api/applications/@me/scoreboard/{id}", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -95,7 +95,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task PutScoreAsync(string id, string userId, int value, CancellationToken cancellationToken = default)
         {
-            var result = await _http.PutAsync($"/applications/@me/scoreboard/{id}/users/{userId}", new
+            var result = await _http.PutAsync($"/api/applications/@me/scoreboard/{id}/users/{userId}", new
             {
                 Value = value
             }, cancellationToken);

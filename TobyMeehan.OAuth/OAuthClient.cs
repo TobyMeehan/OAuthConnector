@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TobyMeehan.OAuth.Collections;
 using TobyMeehan.OAuth.Controllers;
 using TobyMeehan.OAuth.Models;
 using TobyMeehan.OAuth.Security;
@@ -37,6 +38,8 @@ namespace TobyMeehan.OAuth
 
         public IScoreboard Scoreboard { get; private set; }
 
+        public IEntityCollection<IDownload> Downloads { get; private set; }
+
         private async Task InitializeAsync(Token token, CancellationToken cancellationToken)
         {
             Token = token;
@@ -45,6 +48,7 @@ namespace TobyMeehan.OAuth
             User = await _controllerService.Users.GetAsync("@me", cancellationToken);
             Application = await _controllerService.Applications.GetAsync("@me");
             Scoreboard = await Models.Scoreboard.CreateAsync(_controllerService.Scoreboard, cancellationToken);
+            Downloads = await _controllerService.Downloads.GetAsync(cancellationToken);
         }
 
         public async Task<bool> SignInAsync(int localhostPort, string customSuccessFilePath = null, CancellationToken cancellationToken = default)

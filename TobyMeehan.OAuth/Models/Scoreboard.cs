@@ -25,6 +25,22 @@ namespace TobyMeehan.OAuth.Models
             };
         }
 
+        public async Task<IObjective> CreateObjectiveAsync(string name, CancellationToken cancellationToken = default)
+        {
+            var objective = await _controller.PostAsync(name, cancellationToken);
+
+            (Objectives as EntityCollection<IObjective>)?.Add(objective);
+
+            return objective;
+        }
+
+        public async Task DeleteObjectiveAsync(IObjective objective, CancellationToken cancellationToken = default)
+        {
+            await _controller.DeleteAsync(objective.Id, cancellationToken);
+
+            (Objectives as EntityCollection<IObjective>)?.Remove(objective);
+        }
+
         public IEntityCollection<IObjective> Objectives { get; set; }
     }
 }

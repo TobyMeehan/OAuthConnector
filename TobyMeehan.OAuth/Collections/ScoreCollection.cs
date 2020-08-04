@@ -23,6 +23,9 @@ namespace TobyMeehan.OAuth.Collections
 
         public IScore this[string userid] => _scores.Single(s => s.User.Id == userid);
 
+        public void Add(IScore score) => _scores.Add(score);
+        public void Remove(IScore score) => _scores.Remove(score);
+
         public IEnumerator<IScore> GetEnumerator()
         {
             return _scores.GetEnumerator();

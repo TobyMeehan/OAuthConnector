@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using TobyMeehan.OAuth.Collections;
 using TobyMeehan.OAuth.Models;
 
 namespace TobyMeehan.OAuth
@@ -10,6 +11,11 @@ namespace TobyMeehan.OAuth
         /// The current registered OAuth application.
         /// </summary>
         IApplication Application { get; }
+
+        /// <summary>
+        /// All downloads as of the time of signing in.
+        /// </summary>
+        IEntityCollection<IDownload> Downloads { get; }
 
         /// <summary>
         /// Authorization tokens for the API.

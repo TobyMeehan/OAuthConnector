@@ -30,7 +30,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<ObjectiveBase>> scoreboard)
             {
-                return scoreboard.Data.ToEntityCollection<IObjective, ObjectiveBase>(x => new Objective(x));
+                return await Objective.CreateCollectionAsync(scoreboard.Data, this);
             }
 
             throw new Exception();
@@ -52,7 +52,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<ObjectiveBase> objective)
             {
-                return new Objective(objective.Data);
+                return await Objective.CreateAsync(objective.Data, this);
             }
 
             throw new Exception();
@@ -72,7 +72,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<ObjectiveBase> objective)
             {
-                return new Objective(objective.Data);
+                return await Objective.CreateAsync(objective.Data, this);
             }
 
             throw new Exception();

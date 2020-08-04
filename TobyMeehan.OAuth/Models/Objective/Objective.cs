@@ -2,18 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TobyMeehan.OAuth.Collections;
+using TobyMeehan.OAuth.Controllers;
 
 namespace TobyMeehan.OAuth.Models
 {
     
     public class Objective : ObjectiveBase, IObjective
     {
-        public Objective(ObjectiveBase objective)
+        private readonly IScoreboardController _controller;
+
+        public Objective(IScoreboardController controller)
         {
-            Id = objective.Id;
-            Name = objective.Name;
-            Scores = new ScoreCollection(objective.Scores.Select(s => new Score(s)));
+            _controller = controller;
+        }
+
+        public static async Task<Objective> CreateAsync(ObjectiveBase @base, IScoreboardController controller)
+        {
+            return new Objective(controller)
+            {
+                Id = @base.Id,
+                Name = @base.Name,
+                Scores = await Score.CreateCollectionAsync(@base.Scores, controller)
+            };
+        }
+
+        public static async Task<IEntityCollection<IObjective>> CreateCollectionAsync(IEnumerable<ObjectiveBase> collection, IScoreboardController controller)
+        {
+            EntityCollection<IObjective> objectives = new EntityCollection<IObjective>();
+
+            foreach (var objective in collection)
+            {
+                objectives.Add(await CreateAsync(objective, controller));
+            }
+
+            return objectives;
         }
 
         public new IScoreCollection Scores { get; set; }

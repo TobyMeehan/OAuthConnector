@@ -24,6 +24,7 @@ namespace TobyMeehan.OAuth.Collections
         public T this[string id] => _items.Single(x => x.Id == id);
 
         public void Add(T entity) => _items.Add(entity);
+        public void Remove(T entity) => _items.Remove(entity);
 
         public IEnumerator<T> GetEnumerator()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,15 +19,20 @@ namespace TobyMeehan.OAuth.Models
             _controller = controller;
         }
 
-        public static async Task<User> CreateAsync(UserBase @base, IUserController controller, CancellationToken cancellationToken)
+        public static User CreatePartial(UserBase @base)
         {
-            var user = new User(controller)
+            return new User(null)
             {
                 Id = @base.Id,
                 Username = @base.Username,
                 Balance = @base.Balance,
                 Roles = @base.Roles.ToEntityCollection<IRole, RoleBase>(r => new Role(r))
             };
+        }
+
+        public static async Task<User> CreateAsync(UserBase @base, IUserController controller, CancellationToken cancellationToken)
+        {
+            var user = CreatePartial(@base);
 
             user.Transactions = await controller.GetTransactionsAsync(@base.Id, cancellationToken);
             user.Downloads = await controller.GetDownloadsAsync(@base.Id, cancellationToken);
@@ -44,6 +50,28 @@ namespace TobyMeehan.OAuth.Models
             }
 
             return entityCollection.Cast<T>().ToEntityCollection();
+        }
+
+        public async Task<bool> TrySendTransactionAsync(string description, int amount, bool allowNegative = false, CancellationToken cancellationToken = default)
+        {
+            ITransaction transaction;
+
+            try
+            {
+                transaction = await _controller.PostTransactionAsync(Id, description, amount, allowNegative, cancellationToken);
+            }
+            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            (Transactions as EntityCollection<ITransaction>)?.Add(transaction);
+
+            return true;
         }
 
         public new IEntityCollection<IRole> Roles { get; set; }

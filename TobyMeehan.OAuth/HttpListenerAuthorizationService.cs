@@ -11,20 +11,21 @@ namespace TobyMeehan.OAuth
 {
     public class HttpListenerAuthorizationService : IAuthorizationService
     {
-        private readonly ApiVersion _version;
+        private readonly OAuthClientOptions _options;
 
-        public HttpListenerAuthorizationService(ApiVersion version)
+        public HttpListenerAuthorizationService(OAuthClientOptions options)
         {
-            _version = version;
+            _options = options;
         }
 
-        public async Task<string> GetAuthCodeAsync(string clientId, string redirectUri, string codeChallenge = null, Stream responseStream = null)
+        public async Task<string> GetAuthCodeAsync(string clientId, string redirectUri, string codeChallenge, Stream responseStream = null)
         {
-            string authCode = null;
             string state = GetState();
+
+            string code = "";
             string returnedState = "";
 
-            string url = $"{_version.Url(Endpoint.Authorize)}" +
+            string url = $"{_options.BaseUrl.AbsoluteUri}/oauth/authorize" +
                 $"?response_type=code" +
                 $"&client_id={clientId}" +
                 $"&redirect_uri={WebUtility.UrlEncode(redirectUri)}" +
@@ -44,7 +45,17 @@ namespace TobyMeehan.OAuth
                 {
                     var queryString = context.Request.QueryString;
 
-                    authCode = queryString["code"];
+                    if (queryString["error"] == null)
+                    {
+                        if (queryString["error"] == "access_denied")
+                        {
+                            throw new AuthorizationCanceledException();
+                        }
+
+                        throw new AuthorizationFailedException(queryString["error"], queryString["error_message"]);
+                    }
+
+                    code = queryString["code"];
                     returnedState = queryString["state"];
 
                     context.Response.ContentLength64 = responseStream.Length;
@@ -55,21 +66,15 @@ namespace TobyMeehan.OAuth
 
             if (returnedState != state)
             {
-                return null;
+                throw new AuthorizationFailedException("state", "Returned state does not match supplied state.");
             }
 
-            return authCode;
+            return code;
         }
 
         private string GetState()
         {
-            int seed = Environment.UserName.GetHashCode();
-
-            byte[] buffer = Array.Empty<byte>();
-            new Random(seed).NextBytes(buffer);
-
-            byte[] state = new SHA256Managed().ComputeHash(buffer);
-            return Convert.ToBase64String(state);
+            return Guid.NewGuid().ToString().Replace("-", "");
         }
     }
 }

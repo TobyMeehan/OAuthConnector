@@ -33,7 +33,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IErrorHttpResult error)
             {
-                throw new AuthorizeException("Error Getting Access Token", error.Message);
+                throw new AuthorizationFailedException("Error Getting Access Token", error.Message);
             }
 
             if (result is IHttpResult<JsonWebToken> token)
@@ -58,7 +58,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IErrorHttpResult error)
             {
-                throw new AuthorizeException("Error Refreshing Token", error.Message);
+                throw new AuthorizationFailedException("Error Refreshing Token", error.Message);
             }
 
             if (result is IHttpResult<JsonWebToken> token)

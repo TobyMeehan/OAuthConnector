@@ -11,17 +11,9 @@ namespace TobyMeehan.OAuth.Models
     /// </summary>
     public abstract class EntityBase : IEntity
     {
-        protected readonly HttpClient _client;
-
-        public EntityBase()
-        {
-            _client = OAuthClient.HttpClient;
-        }
-
         /// <summary>
         /// Internal ID of the entity.
         /// </summary>
-        [JsonProperty]
         public string Id { get; protected set; }
 
         public override bool Equals(object obj)

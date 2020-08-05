@@ -18,22 +18,23 @@ namespace TobyMeehan.OAuth.Models
             _controller = controller;
         }
 
-        public static async Task<Score> CreateAsync(ScoreBase @base, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)
+        public static async Task<Score> CreateAsync(ScoreBase @base, IObjective objective, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)
         {
             return new Score(controller)
             {
                 User = await Models.User.CreatePartialAsync(@base.User, userController, cancellationToken),
+                Objective = objective,
                 Value = @base.Value
             };
         }
 
-        public static async Task<IScoreCollection> CreateCollectionAsync(IEnumerable<ScoreBase> collection, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)
+        public static async Task<IScoreCollection> CreateCollectionAsync(IEnumerable<ScoreBase> collection, IObjective objective, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)
         {
-            ScoreCollection scores = new ScoreCollection();
+            ScoreCollection scores = new ScoreCollection(controller, objective);
 
             foreach (var score in collection)
             {
-                scores.Add(await CreateAsync(score, controller, userController, cancellationToken));
+                scores.Add(await CreateAsync(score, objective, controller, userController, cancellationToken));
             }
 
             return scores;

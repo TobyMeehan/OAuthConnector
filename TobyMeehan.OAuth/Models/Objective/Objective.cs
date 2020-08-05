@@ -21,12 +21,15 @@ namespace TobyMeehan.OAuth.Models
 
         public static async Task<Objective> CreateAsync(ObjectiveBase @base, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)
         {
-            return new Objective(controller)
+            var objective = new Objective(controller)
             {
                 Id = @base.Id,
-                Name = @base.Name,
-                Scores = await Score.CreateCollectionAsync(@base.Scores, controller, userController, cancellationToken)
+                Name = @base.Name
             };
+
+            objective.Scores = await Score.CreateCollectionAsync(@base.Scores, objective, controller, userController, cancellationToken);
+
+            return objective;
         }
 
         public static async Task<IEntityCollection<IObjective>> CreateCollectionAsync(IEnumerable<ObjectiveBase> collection, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)

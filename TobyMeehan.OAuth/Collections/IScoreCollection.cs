@@ -10,8 +10,8 @@ namespace TobyMeehan.OAuth.Collections
         /// <summary>
         /// Gets the score for the given user.
         /// </summary>
-        /// <param name="userId">ID of the required user.</param>
+        /// <param name="userId">Required user object.</param>
         /// <returns></returns>
-        IScore this[string userId] { get; }
+        IScore this[IUser user] { get; }
     }
 }

@@ -18,17 +18,18 @@ namespace TobyMeehan.OAuth
             _options = options;
         }
 
-        public async Task<string> GetAuthCodeAsync(string clientId, string redirectUri, string codeChallenge, Stream responseStream = null)
+        public async Task<string> GetAuthCodeAsync(string clientId, string redirectUri, string scope, string codeChallenge, Stream responseStream = null)
         {
             string state = GetState();
 
             string code = "";
             string returnedState = "";
 
-            string url = $"{_options.BaseUrl.AbsoluteUri}/oauth/authorize" +
+            string url = $"{_options.BaseUrl.AbsoluteUri}oauth/authorize" +
                 $"?response_type=code" +
                 $"&client_id={clientId}" +
                 $"&redirect_uri={WebUtility.UrlEncode(redirectUri)}" +
+                $"&scope={WebUtility.UrlEncode(scope)}" +
                 $"&state={WebUtility.UrlEncode(state)}" +
                 $"{(codeChallenge != null ? $"&code_challenge={codeChallenge}" : "")}";
 
@@ -45,7 +46,7 @@ namespace TobyMeehan.OAuth
                 {
                     var queryString = context.Request.QueryString;
 
-                    if (queryString["error"] == null)
+                    if (queryString["error"] != null)
                     {
                         if (queryString["error"] == "access_denied")
                         {

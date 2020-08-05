@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace TobyMeehan.OAuth.Http
 
         public async Task<IHttpResult> PostAsync(string url, object data, CancellationToken cancellationToken = default)
         {
-            HttpContent content = new StringContent(SimpleJson.SerializeObject(data));
+            HttpContent content = new StringContent(SimpleJson.SerializeObject(data), Encoding.UTF8, "application/json");
 
             using (var response = await _client.PostAsync(url, content, cancellationToken))
             {
@@ -87,7 +88,7 @@ namespace TobyMeehan.OAuth.Http
 
         public async Task<IHttpResult> PutAsync(string url, object data, CancellationToken cancellationToken = default)
         {
-            HttpContent content = new StringContent(SimpleJson.SerializeObject(data));
+            HttpContent content = new StringContent(SimpleJson.SerializeObject(data), Encoding.UTF8, "application/json");
 
             using (var response = await _client.PutAsync(url, content, cancellationToken))
             {

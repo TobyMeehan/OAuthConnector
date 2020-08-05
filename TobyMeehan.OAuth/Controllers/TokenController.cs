@@ -29,7 +29,7 @@ namespace TobyMeehan.OAuth.Controllers
                 {"code_verifier", codeVerifier }
             };
 
-            var result = await _http.PostAsync<JsonWebToken>("/oauth/token", form, cancellationToken);
+            var result = await _http.PostAsync<JsonWebToken>("oauth/token", form, cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -54,7 +54,7 @@ namespace TobyMeehan.OAuth.Controllers
                 {"refresh_token", refreshToken }
             };
 
-            var result = await _http.PostAsync<JsonWebToken>("/oauth/token", form, cancellationToken);
+            var result = await _http.PostAsync<JsonWebToken>("oauth/token", form, cancellationToken);
 
             if (result is IErrorHttpResult error)
             {

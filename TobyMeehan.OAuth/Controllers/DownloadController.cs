@@ -24,7 +24,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IEntityCollection<IDownload>> GetAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<DownloadBase>>("/api/downloads", cancellationToken);
+            var result = await _http.GetAsync<List<DownloadBase>>("api/downloads", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -41,7 +41,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IDownload> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<DownloadBase>($"/api/downloads/{id}", cancellationToken);
+            var result = await _http.GetAsync<DownloadBase>($"api/downloads/{id}", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -63,7 +63,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IDownload> Post(string title, string shortDescription, string longDescription, CancellationToken cancellationToken = default)
         {
-            var result = await _http.PostAsync<DownloadBase>("/api/downloads", new
+            var result = await _http.PostAsync<DownloadBase>("api/downloads", new
             {
                 Title = title,
                 ShortDescription = shortDescription,
@@ -85,7 +85,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task Delete(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.DeleteAsync($"/api/downloads/{id}", cancellationToken);
+            var result = await _http.DeleteAsync($"api/downloads/{id}", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -95,7 +95,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IEntityCollection<IPartialUser>> GetAuthorsAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<UserBase>>($"/api/downloads/{id}/authors", cancellationToken);
+            var result = await _http.GetAsync<List<UserBase>>($"api/downloads/{id}/authors", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {

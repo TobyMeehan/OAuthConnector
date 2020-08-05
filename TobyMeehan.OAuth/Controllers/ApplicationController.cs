@@ -20,7 +20,7 @@ namespace TobyMeehan.OAuth.Controllers
 
         public async Task<IApplication> GetAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<ApplicationBase>($"/api/applications/{id}", cancellationToken);
+            var result = await _http.GetAsync<ApplicationBase>($"api/applications/{id}", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {

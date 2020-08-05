@@ -21,7 +21,7 @@ namespace TobyMeehan.OAuth.Models
 
         public static async Task<User> CreatePartialAsync(UserBase @base, IUserController controller, CancellationToken cancellationToken)
         {
-            return new User(null)
+            return new User(controller)
             {
                 Id = @base.Id,
                 Username = @base.Username,
@@ -70,6 +70,7 @@ namespace TobyMeehan.OAuth.Models
             try
             {
                 transaction = await _controller.PostTransactionAsync(Id, description, amount, allowNegative, cancellationToken);
+                Balance += transaction.Amount;
             }
             catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
             {

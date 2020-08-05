@@ -13,10 +13,12 @@ namespace TobyMeehan.OAuth.Controllers
     public class ScoreboardController : IScoreboardController
     {
         private readonly IHttp _http;
+        private readonly ControllerService _service;
 
-        public ScoreboardController(IHttp http)
+        public ScoreboardController(IHttp http, ControllerService service)
         {
             _http = http;
+            _service = service;
         }
 
         public async Task<IEntityCollection<IObjective>> GetAsync(CancellationToken cancellationToken = default)
@@ -30,7 +32,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<ObjectiveBase>> scoreboard)
             {
-                return await Objective.CreateCollectionAsync(scoreboard.Data, this);
+                return await Objective.CreateCollectionAsync(scoreboard.Data, this, _service.Users, cancellationToken);
             }
 
             throw new Exception();
@@ -52,7 +54,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<ObjectiveBase> objective)
             {
-                return await Objective.CreateAsync(objective.Data, this);
+                return await Objective.CreateAsync(objective.Data, this, _service.Users, cancellationToken);
             }
 
             throw new Exception();
@@ -72,7 +74,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<ObjectiveBase> objective)
             {
-                return await Objective.CreateAsync(objective.Data, this);
+                return await Objective.CreateAsync(objective.Data, this, _service.Users, cancellationToken);
             }
 
             throw new Exception();

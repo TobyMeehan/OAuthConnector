@@ -19,23 +19,34 @@ namespace TobyMeehan.OAuth.Models
             _controller = controller;
         }
 
-        public static User CreatePartial(UserBase @base)
+        public static async Task<User> CreatePartialAsync(UserBase @base, IUserController controller, CancellationToken cancellationToken)
         {
             return new User(null)
             {
                 Id = @base.Id,
                 Username = @base.Username,
                 Balance = @base.Balance,
-                Roles = @base.Roles.ToEntityCollection<IRole, RoleBase>(r => new Role(r))
-            };
+                Roles = @base.Roles.ToEntityCollection<IRole, RoleBase>(r => new Role(r)),
+                Downloads = await controller.GetDownloadsAsync(@base.Id, cancellationToken)
+        };
         }
 
         public static async Task<User> CreateAsync(UserBase @base, IUserController controller, CancellationToken cancellationToken)
         {
-            var user = CreatePartial(@base);
+            var user = await CreatePartialAsync(@base, controller, cancellationToken);
 
-            user.Transactions = await controller.GetTransactionsAsync(@base.Id, cancellationToken);
-            user.Downloads = await controller.GetDownloadsAsync(@base.Id, cancellationToken);
+            try
+            {
+                user.Transactions = await controller.GetTransactionsAsync(@base.Id, cancellationToken);
+            }
+            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Forbidden)
+            {
+                user.Transactions = null;
+            }
+            catch
+            {
+                throw;
+            }
 
             return user;
         }

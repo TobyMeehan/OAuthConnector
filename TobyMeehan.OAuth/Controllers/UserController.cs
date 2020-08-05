@@ -21,7 +21,7 @@ namespace TobyMeehan.OAuth.Controllers
             _service = service;
         }
 
-        public async Task<IEntityCollection<IUser>> GetAsync(CancellationToken cancellationToken = default)
+        public async Task<IEntityCollection<IPartialUser>> GetAsync(CancellationToken cancellationToken = default)
         {
             var result = await _http.GetAsync<List<UserBase>>("api/users", cancellationToken);
 
@@ -32,13 +32,13 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<UserBase>> users)
             {
-                return await User.CreateCollectionAsync<IUser>(users.Data, this, cancellationToken);
+                return await User.CreateCollectionAsync<IPartialUser>(users.Data, this, cancellationToken);
             }
 
             throw new Exception();
         }
 
-        public async Task<IUser> GetAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<IPartialUser> GetAsync(string id, CancellationToken cancellationToken = default)
         {
             var result = await _http.GetAsync<UserBase>($"api/users/{id}", cancellationToken);
 

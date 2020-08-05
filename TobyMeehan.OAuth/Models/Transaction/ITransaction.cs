@@ -15,11 +15,6 @@ namespace TobyMeehan.OAuth.Models
         IApplication Sender { get; }
 
         /// <summary>
-        /// The user the transaction was sent to.
-        /// </summary>
-        IUser User { get; }
-
-        /// <summary>
         /// Additional detail about the transaction.
         /// </summary>
         string Description { get; }

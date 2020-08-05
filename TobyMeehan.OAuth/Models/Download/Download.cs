@@ -27,7 +27,7 @@ namespace TobyMeehan.OAuth.Models
                 LongDescription = @base.LongDescription
             };
 
-            download.Authors = await controller.GetAuthorsAsync(@base.Id, cancellationToken);
+            download.Authors = await controller.GetAuthorsAsync(download, cancellationToken);
 
             return download;
         }
@@ -44,6 +44,6 @@ namespace TobyMeehan.OAuth.Models
             return entityCollection;
         }
 
-        public new IEntityCollection<IPartialUser> Authors { get; set; }
+        public new IEntityCollection<IDownloadAuthor> Authors { get; set; }
     }
 }

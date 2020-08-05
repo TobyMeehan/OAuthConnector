@@ -7,8 +7,8 @@ namespace TobyMeehan.OAuth.Controllers
 {
     public interface IUserController
     {
-        Task<IEntityCollection<IUser>> GetAsync(CancellationToken cancellationToken = default);
-        Task<IUser> GetAsync(string id, CancellationToken cancellationToken = default);
+        Task<IEntityCollection<IPartialUser>> GetAsync(CancellationToken cancellationToken = default);
+        Task<IPartialUser> GetAsync(string id, CancellationToken cancellationToken = default);
         Task<IEntityCollection<IDownload>> GetDownloadsAsync(string id, CancellationToken cancellationToken = default);
         Task LeaveDownloadAsync(string id, string downloadId, CancellationToken cancellationToken = default);
         Task<IEntityCollection<ITransaction>> GetTransactionsAsync(string id, CancellationToken cancellationToken = default);

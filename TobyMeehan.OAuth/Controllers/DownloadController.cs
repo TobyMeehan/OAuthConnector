@@ -93,9 +93,9 @@ namespace TobyMeehan.OAuth.Controllers
             }
         }
 
-        public async Task<IEntityCollection<IPartialUser>> GetAuthorsAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<IEntityCollection<IDownloadAuthor>> GetAuthorsAsync(IDownload download, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<UserBase>>($"api/downloads/{id}/authors", cancellationToken);
+            var result = await _http.GetAsync<List<UserBase>>($"api/downloads/{download.Id}/authors", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -104,7 +104,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<UserBase>> users)
             {
-                return await User.CreateCollectionAsync<IPartialUser>(users.Data, _service.Users, cancellationToken);
+                return await DownloadAuthor.CreateCollectionAsync(users.Data, download, _service.Users, cancellationToken);
             }
 
             throw new Exception();

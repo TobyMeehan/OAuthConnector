@@ -22,8 +22,7 @@ namespace TobyMeehan.OAuth.Models
         {
             return new Transaction(@base)
             {
-                Sender = await applicationController.GetAsync(@base.AppId, cancellationToken),
-                User = await userController.GetAsync(@base.UserId, cancellationToken)
+                Sender = await applicationController.GetAsync(@base.AppId, cancellationToken)
             };
         }
 
@@ -40,6 +39,5 @@ namespace TobyMeehan.OAuth.Models
         }
 
         public new IApplication Sender { get; set; }
-        public new IUser User { get; set; }
     }
 }

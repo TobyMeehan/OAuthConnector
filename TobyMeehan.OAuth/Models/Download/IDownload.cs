@@ -29,6 +29,6 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// The download's authors.
         /// </summary>
-        IEntityCollection<IPartialUser> Authors { get; }
+        IEntityCollection<IDownloadAuthor> Authors { get; }
     }
 }

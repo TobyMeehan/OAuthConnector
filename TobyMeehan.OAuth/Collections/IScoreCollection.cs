@@ -7,6 +7,11 @@ namespace TobyMeehan.OAuth.Collections
 {
     public interface IScoreCollection : IEnumerable<IScore>
     {
-        IScore this[string userid] { get; }
+        /// <summary>
+        /// Gets the score for the given user.
+        /// </summary>
+        /// <param name="userId">ID of the required user.</param>
+        /// <returns></returns>
+        IScore this[string userId] { get; }
     }
 }

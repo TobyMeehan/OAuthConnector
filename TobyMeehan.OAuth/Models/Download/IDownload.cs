@@ -27,6 +27,11 @@ namespace TobyMeehan.OAuth.Models
         string LongDescription { get; }
 
         /// <summary>
+        /// The latest version of the download.
+        /// </summary>
+        Version Version { get; }
+
+        /// <summary>
         /// The download's authors.
         /// </summary>
         IEntityCollection<IDownloadAuthor> Authors { get; }

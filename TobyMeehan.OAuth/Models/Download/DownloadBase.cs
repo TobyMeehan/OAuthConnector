@@ -17,6 +17,11 @@ namespace TobyMeehan.OAuth.Models
         [DataMember(Name = "long_description")]
         public string LongDescription { get; set; }
 
+        [DataMember(Name = "version")]
+        public string VersionString { get; set; }
+
+        public Version Version => Version.Parse(VersionString);
+
         [DataMember(Name = "authors")]
         public List<UserBase> Authors { get; set; }
     }

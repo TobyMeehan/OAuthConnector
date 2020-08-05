@@ -24,7 +24,8 @@ namespace TobyMeehan.OAuth.Models
                 Id = @base.Id,
                 Title = @base.Title,
                 ShortDescription = @base.ShortDescription,
-                LongDescription = @base.LongDescription
+                LongDescription = @base.LongDescription,
+                VersionString = @base.VersionString
             };
 
             download.Authors = await controller.GetAuthorsAsync(download, cancellationToken);

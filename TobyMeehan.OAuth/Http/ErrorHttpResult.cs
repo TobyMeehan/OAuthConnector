@@ -11,9 +11,14 @@ namespace TobyMeehan.OAuth.Http
     {
         public ErrorHttpResult(HttpStatusCode statusCode, string body) : base(statusCode, body)
         {
-            ErrorResponse error = SimpleJson.DeserializeObject<ErrorResponse>(body);
-
-            Message = error.Message;
+            if (SimpleJson.TryDeserializeObject(body, out ErrorResponse error))
+            {
+                Message = error.Message;
+            }
+            else
+            {
+                Message = body;
+            }            
         }
 
         public string Message { get; set; }

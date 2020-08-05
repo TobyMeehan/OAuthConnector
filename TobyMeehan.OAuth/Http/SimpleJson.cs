@@ -29,7 +29,7 @@
 //#define SIMPLE_JSON_DYNAMIC
 
 // NOTE: uncomment the following line to enable DataContract support.
-//#define SIMPLE_JSON_DATACONTRACT
+#define SIMPLE_JSON_DATACONTRACT
 
 // NOTE: uncomment the following line to enable IReadOnlyCollection<T> and IReadOnlyList<T> support.
 //#define SIMPLE_JSON_READONLY_COLLECTIONS
@@ -570,6 +570,19 @@ namespace TobyMeehan.OAuth.Http
                 obj = null;
 
             return success;
+        }
+
+        public static bool TryDeserializeObject<T>(string json, out T result)
+        {
+            if (TryDeserializeObject(json, out object obj))
+            {
+                result = (T)obj;
+                return true;
+            }
+
+            result = default;
+
+            return false;
         }
 
         public static object DeserializeObject(string json, Type type, IJsonSerializerStrategy jsonSerializerStrategy)

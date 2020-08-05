@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace TobyMeehan.OAuth.Models
@@ -13,6 +14,7 @@ namespace TobyMeehan.OAuth.Models
         /// <summary>
         /// Internal ID of the entity.
         /// </summary>
+        [DataMember(Name = "id")]
         public string Id { get; protected set; }
 
         public override bool Equals(object obj)

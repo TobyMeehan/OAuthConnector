@@ -574,15 +574,16 @@ namespace TobyMeehan.OAuth.Http
 
         public static bool TryDeserializeObject<T>(string json, out T result)
         {
-            if (TryDeserializeObject(json, out object obj))
+            try
             {
-                result = (T)obj;
+                result = (T)DeserializeObject(json, typeof(T));
                 return true;
             }
-
-            result = default;
-
-            return false;
+            catch
+            {
+                result = default;
+                return false;
+            }
         }
 
         public static object DeserializeObject(string json, Type type, IJsonSerializerStrategy jsonSerializerStrategy)

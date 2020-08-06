@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -32,7 +33,15 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<ObjectiveBase>> scoreboard)
             {
-                return await Objective.CreateCollectionAsync(scoreboard.Data, this, _service.Users, cancellationToken);
+                EntityCollection<IObjective> collection = new EntityCollection<IObjective>();
+
+                foreach (var objective in scoreboard.Data)
+                {
+                    var entry = Objective.Create(objective, null, this);
+                    entry.Scores = new ScoreCollection(objective.Scores.Select(x => Score.Create(x, entry, this)), entry, this);
+                }
+
+                return collection;
             }
 
             throw new Exception();
@@ -54,7 +63,9 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<ObjectiveBase> objective)
             {
-                return await Objective.CreateAsync(objective.Data, this, _service.Users, cancellationToken);
+                var entry = Objective.Create(objective.Data, null, this);
+                entry.Scores = new ScoreCollection(objective.Data.Scores.Select(x => Score.Create(x, entry, this)), entry, this);
+                return entry;
             }
 
             throw new Exception();
@@ -74,7 +85,9 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<ObjectiveBase> objective)
             {
-                return await Objective.CreateAsync(objective.Data, this, _service.Users, cancellationToken);
+                var entry = Objective.Create(objective.Data, null, this);
+                entry.Scores = new ScoreCollection(objective.Data.Scores.Select(x => Score.Create(x, entry, this)), entry, this);
+                return entry;
             }
 
             throw new Exception();

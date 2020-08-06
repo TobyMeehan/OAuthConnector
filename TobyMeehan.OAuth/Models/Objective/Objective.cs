@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,29 +20,14 @@ namespace TobyMeehan.OAuth.Models
             _controller = controller;
         }
 
-        public static async Task<Objective> CreateAsync(ObjectiveBase @base, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)
+        public static Objective Create(ObjectiveBase @base, IScoreCollection scores, IScoreboardController controller)
         {
-            var objective = new Objective(controller)
+            return new Objective(controller)
             {
                 Id = @base.Id,
-                Name = @base.Name
+                Name = @base.Name,
+                Scores = scores
             };
-
-            objective.Scores = await Score.CreateCollectionAsync(@base.Scores, objective, controller, userController, cancellationToken);
-
-            return objective;
-        }
-
-        public static async Task<IEntityCollection<IObjective>> CreateCollectionAsync(IEnumerable<ObjectiveBase> collection, IScoreboardController controller, IUserController userController, CancellationToken cancellationToken)
-        {
-            EntityCollection<IObjective> objectives = new EntityCollection<IObjective>();
-
-            foreach (var objective in collection)
-            {
-                objectives.Add(await CreateAsync(objective, controller, userController, cancellationToken));
-            }
-
-            return objectives;
         }
 
         public new IScoreCollection Scores { get; set; }

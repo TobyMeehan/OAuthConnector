@@ -12,10 +12,12 @@ namespace TobyMeehan.OAuth.Controllers
     public class ApplicationController : IApplicationController
     {
         private readonly IHttp _http;
+        private readonly ControllerService _service;
 
-        public ApplicationController(IHttp http)
+        public ApplicationController(IHttp http, ControllerService service)
         {
             _http = http;
+            _service = service;
         }
 
         public async Task<IApplication> GetAsync(string id, CancellationToken cancellationToken = default)
@@ -34,7 +36,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<ApplicationBase> application)
             {
-                return new Application(application.Data);
+                return Application.Create(application.Data, this);
             }
 
             throw new Exception();

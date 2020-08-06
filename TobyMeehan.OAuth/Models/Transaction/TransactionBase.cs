@@ -10,7 +10,6 @@ namespace TobyMeehan.OAuth.Models
     {
         [DataMember(Name = "app_id")]
         public string AppId { get; set; }
-        public ApplicationBase Sender { get; set; }
 
         [DataMember(Name = "user_id")]
         public string UserId { get; set; }
@@ -21,5 +20,8 @@ namespace TobyMeehan.OAuth.Models
 
         [DataMember(Name = "amount")]
         public int Amount { get; set; }
+
+        [DataMember(Name = "sent")]
+        public DateTime Sent { get; set; }
     }
 }

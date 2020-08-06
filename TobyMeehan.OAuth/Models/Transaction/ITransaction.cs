@@ -23,5 +23,10 @@ namespace TobyMeehan.OAuth.Models
         /// The amount the transaction changed the user's balance.
         /// </summary>
         int Amount { get; }
+
+        /// <summary>
+        /// The time the transaction was sent.
+        /// </summary>
+        DateTime Sent { get; }
     }
 }

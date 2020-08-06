@@ -4,19 +4,33 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TobyMeehan.OAuth.Collections;
+using TobyMeehan.OAuth.Controllers;
 
 namespace TobyMeehan.OAuth.Models
 {
     public class Application : ApplicationBase, IApplication
     {
-        public Application(ApplicationBase application)
+        private readonly IApplicationController _controller;
+
+        public Application(IApplicationController controller)
         {
-            Id = application.Id;
-            Name = application.Name;
-            Description = application.Description;
-            IconUrl = application.IconUrl;
+            _controller = controller;
         }
 
-        public new IUser User { get; set; }
+        public static Application Create(ApplicationBase @base, IApplicationController controller)
+        {
+            return new Application(controller)
+            {
+                Id = @base.Id,
+                UserId = @base.UserId,
+                Name = @base.Name,
+                Description = @base.Description,
+                IconUrl = @base.IconUrl
+            };
+        }
+
+        public IPartialUser Author { get; set; }
+
+        public IDownload Download { get; set; }
     }
 }

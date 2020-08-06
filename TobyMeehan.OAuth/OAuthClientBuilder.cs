@@ -23,7 +23,7 @@ namespace TobyMeehan.OAuth
 
             ControllerService controllerService = new ControllerService();
 
-            controllerService.Applications = new ApplicationController(httpService);
+            controllerService.Applications = new ApplicationController(httpService, controllerService);
             controllerService.Downloads = new DownloadController(httpService, controllerService);
             controllerService.Scoreboard = new ScoreboardController(httpService, controllerService);
             controllerService.Token = new TokenController(httpService);

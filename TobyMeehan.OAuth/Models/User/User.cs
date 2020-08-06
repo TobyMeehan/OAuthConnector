@@ -19,48 +19,15 @@ namespace TobyMeehan.OAuth.Models
             _controller = controller;
         }
 
-        public static async Task<User> CreatePartialAsync(UserBase @base, IUserController controller, CancellationToken cancellationToken)
+        public static User Create(UserBase @base, IUserController controller)
         {
             return new User(controller)
             {
                 Id = @base.Id,
                 Username = @base.Username,
                 Balance = @base.Balance,
-                Roles = @base.Roles.ToEntityCollection<IRole, RoleBase>(r => new Role(r)),
-                Downloads = await controller.GetDownloadsAsync(@base.Id, cancellationToken)
-        };
-        }
-
-        public static async Task<User> CreateAsync(UserBase @base, IUserController controller, CancellationToken cancellationToken)
-        {
-            var user = await CreatePartialAsync(@base, controller, cancellationToken);
-
-            try
-            {
-                user.Transactions = await controller.GetTransactionsAsync(@base.Id, cancellationToken);
-            }
-            catch (ApiException ex) when (ex.StatusCode == HttpStatusCode.Forbidden)
-            {
-                user.Transactions = null;
-            }
-            catch
-            {
-                throw;
-            }
-
-            return user;
-        }
-
-        public static async Task<IEntityCollection<T>> CreateCollectionAsync<T>(IEnumerable<UserBase> collection, IUserController controller, CancellationToken cancellationToken) where T : IEntity
-        {
-            var entityCollection = new EntityCollection<User>();
-
-            foreach (var user in collection)
-            {
-                entityCollection.Add(await CreateAsync(user, controller, cancellationToken));
-            }
-
-            return entityCollection.Cast<T>().ToEntityCollection();
+                Roles = @base.Roles.ToEntityCollection<IRole, RoleBase>(r => new Role(r))
+            };
         }
 
         public async Task<bool> TrySendTransactionAsync(string description, int amount, bool allowNegative = false, CancellationToken cancellationToken = default)

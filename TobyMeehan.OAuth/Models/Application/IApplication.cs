@@ -23,5 +23,15 @@ namespace TobyMeehan.OAuth.Models
         /// The URL of the application's icon image.
         /// </summary>
         string IconUrl { get; }
+
+        /// <summary>
+        /// The author of the application.
+        /// </summary>
+        IPartialUser Author { get; }
+
+        /// <summary>
+        /// The download connected to the application.
+        /// </summary>
+        IDownload Download { get; }
     }
 }

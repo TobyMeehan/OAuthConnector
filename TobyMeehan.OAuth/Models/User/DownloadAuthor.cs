@@ -18,7 +18,7 @@ namespace TobyMeehan.OAuth.Models
             _controller = controller;
         }
 
-        public static async Task<DownloadAuthor> CreateAsync(UserBase @base, IDownload download, IUserController controller, CancellationToken cancellationToken)
+        public static DownloadAuthor Create(UserBase @base, IDownload download, IUserController controller)
         {
             return new DownloadAuthor(controller)
             {
@@ -27,18 +27,6 @@ namespace TobyMeehan.OAuth.Models
                 Roles = @base.Roles.ToEntityCollection<IRole, RoleBase>(x => new Role(x)),
                 Download = download
             };
-        }
-
-        public static async Task<IEntityCollection<IDownloadAuthor>> CreateCollectionAsync(IEnumerable<UserBase> collection, IDownload download, IUserController controller, CancellationToken cancellationToken)
-        {
-            EntityCollection<IDownloadAuthor> authors = new EntityCollection<IDownloadAuthor>();
-
-            foreach (var author in collection)
-            {
-                authors.Add(await CreateAsync(author, download, controller, cancellationToken));
-            }
-
-            return authors;
         }
 
         public Task LeaveDownloadAsync(CancellationToken cancellationToken = default)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -40,35 +41,96 @@ namespace TobyMeehan.OAuth
         /// </summary>
         public Token Token { get; private set; }
 
+        private User _user;
+        private EntityCollection<IPartialUser> _users;
+        private Application _application;
+        private Scoreboard _scoreboard;
+        private EntityCollection<IDownload> _downloads;
+
         /// <summary>
         /// The current signed in user.
         /// </summary>
-        public IUser User { get; private set; }
+        public IUser User => _user;
+
+        public IEntityCollection<IPartialUser> Users => _users;
 
         /// <summary>
         /// The current application.
         /// </summary>
-        public IApplication Application { get; private set; }
+        public IApplication Application => _application;
 
         /// <summary>
         /// The scoreboard for the current application.
         /// </summary>
-        public IScoreboard Scoreboard { get; private set; }
+        public IScoreboard Scoreboard => _scoreboard;
 
         /// <summary>
         /// Collection of all downloads.
         /// </summary>
-        public IEntityCollection<IDownload> Downloads { get; private set; }
+        public IEntityCollection<IDownload> Downloads => _downloads;
 
         private async Task InitializeAsync(Token token, CancellationToken cancellationToken)
         {
             Token = token;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token.TokenType, token.AccessToken);
 
-            User = await _controllerService.Users.GetAsync("@me", cancellationToken) as IUser;
-            Application = await _controllerService.Applications.GetAsync("@me");
-            Scoreboard = await Models.Scoreboard.CreateAsync(_controllerService.Scoreboard, cancellationToken);
-            Downloads = await _controllerService.Downloads.GetAsync(cancellationToken);
+            _users = new EntityCollection<IPartialUser>(await _controllerService.Users.GetAsync(cancellationToken));
+            _downloads = new EntityCollection<IDownload>(await _controllerService.Downloads.GetAsync(cancellationToken));
+
+            foreach (var user in _users.Select(u => u as User))
+            {
+                user.Downloads = new EntityCollection<IDownload>();
+
+                foreach (var download in await _controllerService.Users.GetDownloadsAsync(user.Id, cancellationToken))
+                {
+                    ((EntityCollection<IDownload>)user.Downloads).Add(_downloads[download.Id]);
+                }
+            }
+
+            foreach (var download in _downloads.Select(d => d as Download))
+            {
+                download.Authors = new EntityCollection<IPartialUser>();
+
+                foreach (var user in await _controllerService.Downloads.GetAuthorsAsync(download.Id, cancellationToken))
+                {
+                    ((EntityCollection<IPartialUser>)download.Authors).Add(_users[user.Id]);
+                }
+            }
+
+            var currentUser = (await _controllerService.Users.GetAsync("@me", cancellationToken)) as User;
+            _user = _users[currentUser.Id] as User;
+            _user.Balance = currentUser.Balance;
+
+            _user.Transactions = await _controllerService.Users.GetTransactionsAsync("@me", cancellationToken);
+
+            foreach (var transaction in _user.Transactions.Select(t => t as Transaction))
+            {
+                transaction.Sender = await _controllerService.Applications.GetAsync(transaction.AppId, cancellationToken);
+                var sender = transaction.Sender as Application;
+                sender.Author = _users[sender.UserId];
+                
+                if (sender.DownloadId != null)
+                {
+                    sender.Download = _downloads[sender.DownloadId];
+                }
+            }
+
+            _scoreboard = await Models.Scoreboard.CreateAsync(_controllerService.Scoreboard, cancellationToken);
+
+            foreach (var objective in _scoreboard.Objectives)
+            {
+                foreach (var score in objective.Scores.Select(s => s as Score))
+                {
+                    score.User = _users[score.User.Id];
+                }
+            }
+
+            _application = await _controllerService.Applications.GetAsync("@me", cancellationToken) as Application;
+            
+            if (_application.DownloadId != null)
+            {
+                _application.Download = _downloads[_application.DownloadId];
+            }
         }
 
         /// <summary>

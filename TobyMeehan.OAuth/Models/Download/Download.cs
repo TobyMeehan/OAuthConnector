@@ -17,9 +17,9 @@ namespace TobyMeehan.OAuth.Models
             _controller = controller;
         }
 
-        public static async Task<Download> CreateAsync(DownloadBase @base, IDownloadController controller, CancellationToken cancellationToken)
+        public static Download Create(DownloadBase @base, IDownloadController controller)
         {
-            var download = new Download(controller)
+            return new Download(controller)
             {
                 Id = @base.Id,
                 Title = @base.Title,
@@ -27,24 +27,8 @@ namespace TobyMeehan.OAuth.Models
                 LongDescription = @base.LongDescription,
                 VersionString = @base.VersionString
             };
-
-            download.Authors = await controller.GetAuthorsAsync(download, cancellationToken);
-
-            return download;
         }
 
-        public static async Task<IEntityCollection<IDownload>> CreateCollectionAsync(IEnumerable<DownloadBase> collection, IDownloadController controller, CancellationToken cancellationToken)
-        {
-            var entityCollection = new EntityCollection<IDownload>();
-
-            foreach (var download in collection)
-            {
-                entityCollection.Add(await CreateAsync(download, controller, cancellationToken));
-            }
-
-            return entityCollection;
-        }
-
-        public new IEntityCollection<IDownloadAuthor> Authors { get; set; }
+        public new IEntityCollection<IPartialUser> Authors { get; set; }
     }
 }

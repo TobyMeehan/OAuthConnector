@@ -33,7 +33,14 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<DownloadBase>> downloads)
             {
-                return await Download.CreateCollectionAsync(downloads.Data, this, cancellationToken);
+                EntityCollection<IDownload> collection = new EntityCollection<IDownload>();
+
+                foreach (var download in downloads.Data)
+                {
+                    collection.Add(Download.Create(download, this));
+                }
+
+                return collection;
             }
 
             throw new Exception();
@@ -55,7 +62,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<DownloadBase> download)
             {
-                return await Download.CreateAsync(download.Data, this, cancellationToken);
+                return Download.Create(download.Data, this);
             }
 
             throw new Exception();
@@ -77,7 +84,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<DownloadBase> download)
             {
-                return await Download.CreateAsync(download.Data, this, cancellationToken);
+                return Download.Create(download.Data, this);
             }
 
             throw new Exception();
@@ -93,9 +100,9 @@ namespace TobyMeehan.OAuth.Controllers
             }
         }
 
-        public async Task<IEntityCollection<IDownloadAuthor>> GetAuthorsAsync(IDownload download, CancellationToken cancellationToken = default)
+        public async Task<IEntityCollection<IPartialUser>> GetAuthorsAsync(string id, CancellationToken cancellationToken = default)
         {
-            var result = await _http.GetAsync<List<UserBase>>($"api/downloads/{download.Id}/authors", cancellationToken);
+            var result = await _http.GetAsync<List<UserBase>>($"api/downloads/{id}/authors", cancellationToken);
 
             if (result is IErrorHttpResult error)
             {
@@ -104,7 +111,14 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<UserBase>> users)
             {
-                return await DownloadAuthor.CreateCollectionAsync(users.Data, download, _service.Users, cancellationToken);
+                EntityCollection<IPartialUser> collection = new EntityCollection<IPartialUser>();
+
+                foreach (var user in users.Data)
+                {
+                    collection.Add(User.Create(user, _service.Users));
+                }
+
+                return collection;
             }
 
             throw new Exception();

@@ -14,28 +14,15 @@ namespace TobyMeehan.OAuth.Models
         private Transaction(TransactionBase transaction)
         {
             Id = transaction.Id;
+            AppId = transaction.AppId;
             Description = transaction.Description;
             Amount = transaction.Amount;
+            Sent = transaction.Sent;
         }
 
-        public static async Task<Transaction> CreateAsync(TransactionBase @base, IUserController userController, IApplicationController applicationController, CancellationToken cancellationToken)
+        public static Transaction Create(TransactionBase @base)
         {
-            return new Transaction(@base)
-            {
-                Sender = await applicationController.GetAsync(@base.AppId, cancellationToken)
-            };
-        }
-
-        public static async Task<IEntityCollection<ITransaction>> CreateCollectionAsync(IEnumerable<TransactionBase> collection, IUserController userController, IApplicationController applicationController, CancellationToken cancellationToken)
-        {
-            var entityCollection = new EntityCollection<ITransaction>();
-
-            foreach (var transaction in collection)
-            {
-                entityCollection.Add(await CreateAsync(transaction, userController, applicationController, cancellationToken));
-            }
-
-            return entityCollection;
+            return new Transaction(@base);
         }
 
         public new IApplication Sender { get; set; }

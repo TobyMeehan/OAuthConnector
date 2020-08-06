@@ -32,7 +32,14 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<UserBase>> users)
             {
-                return await User.CreateCollectionAsync<IPartialUser>(users.Data, this, cancellationToken);
+                EntityCollection<IPartialUser> collection = new EntityCollection<IPartialUser>();
+
+                foreach (var user in users.Data)
+                {
+                    collection.Add(User.Create(user, this));
+                }
+
+                return collection;
             }
 
             throw new Exception();
@@ -54,7 +61,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<UserBase> user)
             {
-                return await User.CreateAsync(user.Data, this, cancellationToken);
+                return User.Create(user.Data, this);
             }
 
             throw new Exception();
@@ -71,7 +78,14 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<List<DownloadBase>> downloads)
             {
-                return await Download.CreateCollectionAsync(downloads.Data, _service.Downloads, cancellationToken);
+                EntityCollection<IDownload> collection = new EntityCollection<IDownload>();
+
+                foreach (var download in downloads.Data)
+                {
+                    collection.Add(Download.Create(download, _service.Downloads));
+                }
+
+                return collection;
             }
 
             throw new Exception();
@@ -101,9 +115,16 @@ namespace TobyMeehan.OAuth.Controllers
                 throw new ApiException(error);
             }
 
-            if (result is IHttpResult<List<TransactionBase>> transaction)
+            if (result is IHttpResult<List<TransactionBase>> transactions)
             {
-                return await Transaction.CreateCollectionAsync(transaction.Data, this, _service.Applications, cancellationToken);
+                EntityCollection<ITransaction> collection = new EntityCollection<ITransaction>();
+
+                foreach (var transaction in transactions.Data)
+                {
+                    collection.Add(Transaction.Create(transaction));
+                }
+
+                return collection;
             }
 
             throw new Exception();
@@ -124,7 +145,7 @@ namespace TobyMeehan.OAuth.Controllers
 
             if (result is IHttpResult<TransactionBase> transaction)
             {
-                return await Transaction.CreateAsync(transaction.Data, this, _service.Applications, cancellationToken);
+                return Transaction.Create(transaction.Data);
             }
 
             throw new Exception();

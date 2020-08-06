@@ -11,7 +11,7 @@ namespace TobyMeehan.OAuth.Models
         [DataMember(Name = "name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "userid")]
+        [DataMember(Name = "user_id")]
         public string UserId { get; set; }
 
         [DataMember(Name = "description")]
@@ -19,5 +19,8 @@ namespace TobyMeehan.OAuth.Models
 
         [DataMember(Name = "icon_url")]
         public string IconUrl { get; set; }
+
+        [DataMember(Name = "download_id")]
+        public string DownloadId { get; set; }
     }
 }

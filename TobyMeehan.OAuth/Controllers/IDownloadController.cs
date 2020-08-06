@@ -11,6 +11,6 @@ namespace TobyMeehan.OAuth.Controllers
         Task<IEntityCollection<IDownload>> GetAsync(CancellationToken cancellationToken = default);
         Task<IDownload> GetAsync(string id, CancellationToken cancellationToken = default);
         Task<IDownload> Post(string title, string shortDescription, string longDescription, CancellationToken cancellationToken = default);
-        Task<IEntityCollection<IDownloadAuthor>> GetAuthorsAsync(IDownload download, CancellationToken cancellationToken = default);
+        Task<IEntityCollection<IPartialUser>> GetAuthorsAsync(string id, CancellationToken cancellationToken = default);
     }
 }

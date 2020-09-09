@@ -13,11 +13,11 @@ namespace Tester
 
         static async Task Main(string[] args)
         {
-            string clientId = "46375913-8258-11ea-978f-1e37b9fbbec6"; // DO NOT ACTUALLY DO THIS
+            string clientId = "43ac0ad1-8498-11ea-978f-1e37b9fbbec6"; // DO NOT ACTUALLY DO THIS
 
             Console.WriteLine("Authorising...");
 
-            await _client.SignInAsync(clientId, 6969, "custom.html");
+            await _client.SignInAsync(clientId, 6969);
 
             if (!_client.User.IsSignedIn)
             {

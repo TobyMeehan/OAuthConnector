@@ -88,6 +88,10 @@ namespace TobyMeehan.OAuth
                 _token = token;
                 HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_token.TokenType, _token.AccessToken);
             })
+                .OnBadRequest<dynamic>((d, statusCode, reasonPhrase) =>
+                {
+                    throw new Exception();
+                })
             .SendAsync();
 
             var accountController = new AccountController(HttpClient);

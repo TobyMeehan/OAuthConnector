@@ -17,26 +17,26 @@ namespace TobyMeehan.OAuth.Data
 
         public IHttpRequest GetAccessTokenWithPkce(string clientId, string redirectUri, string codeVerifier, string authCode)
         {
-            return _client.Post(Config.TokenUrl, new
+            return _client.PostHttpContent(Config.TokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>
             {
-                grant_type = "authorization_code",
-                code = authCode,
-                redirect_uri = redirectUri,
-                client_id = clientId,
-                code_verifier = codeVerifier
-            });
+                {"grant_type", "authorization_code" },
+                {"code", authCode },
+                {"redirect_uri", redirectUri },
+                {"client_id", clientId },
+                {"code_verifier", codeVerifier }
+            }));
         }
 
         public IHttpRequest GetAccessTokenWithSecret(string clientId, string redirectUri, string secret, string authCode)
         {
-            return _client.Post(Config.TokenUrl, new
+            return _client.PostHttpContent(Config.TokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>
             {
-                grant_type = "authorization_code",
-                code = authCode,
-                redirect_uri = redirectUri,
-                client_id = clientId,
-                client_secret = secret
-            });
+                {"grant_type", "authorization_code" },
+                {"code", authCode },
+                {"redirect_uri", redirectUri },
+                {"client_id", clientId },
+                {"client_secret", secret }
+            }));
         }
     }
 }

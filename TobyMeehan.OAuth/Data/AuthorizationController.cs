@@ -23,13 +23,18 @@ namespace TobyMeehan.OAuth.Data
 
                 listener.Start();
 
-                Process.Start($"{Config.AuthoriseUrl}?response_type=code&client_id={clientId}&redirect_uri={WebUtility.UrlEncode(redirectUri)}&state={WebUtility.UrlEncode(state)}{(codeChallenge != null ? $"&code_challenge={codeChallenge}" : "")}");
+                Process.Start($"{Config.AuthoriseUrl}?response_type=code&client_id={clientId}&redirect_uri={WebUtility.UrlEncode(redirectUri)}&state={WebUtility.UrlEncode(state)}" +
+                    $"&scope={WebUtility.UrlEncode("identify transactions downloads")}" +
+                    $"{(codeChallenge != null ? $"&code_challenge={codeChallenge}" : "")}");
 
                 HttpListenerContext context = await listener.GetContextAsync();
                 var queryString = context.Request.QueryString;
 
                 authCode = queryString["code"];
                 returnedState = queryString["state"];
+
+                string error = queryString["error"];
+                string message = queryString["error_message"];
 
                 if (responseStream == null)
                 {

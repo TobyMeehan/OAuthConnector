@@ -17,12 +17,12 @@ namespace TobyMeehan.OAuth.Data
 
         public IHttpRequest GetDownloads()
         {
-            return _client.Get($"{Config.ApiUrl}/download");
+            return _client.Get($"{Config.ApiUrl}/downloads");
         }
 
         public IHttpRequest GetDownload(string id)
         {
-            return _client.Get($"{Config.ApiUrl}/download/{id}");
+            return _client.Get($"{Config.ApiUrl}/downloads/{id}");
         }
     }
 }

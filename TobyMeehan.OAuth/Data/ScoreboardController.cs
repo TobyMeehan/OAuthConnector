@@ -25,9 +25,9 @@ namespace TobyMeehan.OAuth.Data
             return _client.Post($"{Config.ApiUrl}/applications/@me/scoreboard", new { Name = name });
         }
 
-        public IHttpRequest UpdateScore(string objective, int score)
+        public IHttpRequest UpdateScore(string objective, int score, string user = "@me")
         {
-            return _client.Post($"{Config.ApiUrl}/applications/@me/scoreboard/{objective}/users/@me", new
+            return _client.Post($"{Config.ApiUrl}/applications/@me/scoreboard/{objective}/users/{user}", new
             {
                 objective,
                 score

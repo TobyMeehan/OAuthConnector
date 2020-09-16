@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TobyMeehan.OAuth.Collections;
 using TobyMeehan.OAuth.Data;
 
 namespace TobyMeehan.OAuth.Models
@@ -17,6 +18,15 @@ namespace TobyMeehan.OAuth.Models
         /// </summary>
         [JsonProperty]
         public string Name { get; private set; }
+
+
+        [JsonProperty]
+        private List<Score> _scores = new List<Score>();
+        [JsonIgnore]
+        /// <summary>
+        /// The scores for this objective.
+        /// </summary>
+        public ScoreCollection Scores => new ScoreCollection(_scores);
 
         /// <summary>
         /// Updates the user's score for this objective. This will not update any parent scoreboard object.

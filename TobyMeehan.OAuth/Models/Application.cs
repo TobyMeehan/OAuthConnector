@@ -29,9 +29,9 @@ namespace TobyMeehan.OAuth.Models
             Scoreboard scoreboard = null;
 
             await scoreboardController.GetScoreboard()
-                .OnOK<Scoreboard>((result) =>
+                .OnOK<List<Objective>>((result) =>
                 {
-                    scoreboard = result;
+                    scoreboard = new Scoreboard(result);
                 })
                 .SendAsync();
 

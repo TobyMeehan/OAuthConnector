@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TobyMeehan.OAuth.Collections;
 using TobyMeehan.OAuth.Data;
 
 namespace TobyMeehan.OAuth.Models
@@ -20,13 +22,23 @@ namespace TobyMeehan.OAuth.Models
             _client = OAuthClient.HttpClient;
         }
 
+        public Scoreboard(IEnumerable<Objective> scoreboard) : this()
+        {
+            _objectives = scoreboard.ToList();
+
+            foreach (var objective in scoreboard)
+            {
+                _scores.AddRange(objective.Scores);
+            }
+        }
+
         [JsonProperty(PropertyName = "Objectives")]
         private List<Objective> _objectives = new List<Objective>();
         /// <summary>
         /// All the objectives in the scoreboard.
         /// </summary>
         [JsonIgnore]
-        public IReadOnlyList<Objective> Objectives => _objectives.AsReadOnly();
+        public EntityCollection<Objective> Objectives => new EntityCollection<Objective>(_objectives);
 
         [JsonProperty(PropertyName = "Scores")]
         private List<Score> _scores = new List<Score>();
@@ -34,7 +46,7 @@ namespace TobyMeehan.OAuth.Models
         /// The scores for each objective and user.
         /// </summary>
         [JsonIgnore]
-        public IReadOnlyList<Score> Scores => _scores.AsReadOnly(); 
+        public ScoreCollection Scores => new ScoreCollection(_scores);
 
         /// <summary>
         /// Creates a new objective with the specified name.

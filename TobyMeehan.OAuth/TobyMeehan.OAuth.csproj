@@ -13,7 +13,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags />
     <PackageProjectUrl>https://github.com/TobyMeehan/OAuthConnector</PackageProjectUrl>
-    <Version>1.0.1</Version>
+    <Version>1.1.1-beta</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

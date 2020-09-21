@@ -88,7 +88,7 @@ namespace TobyMeehan.OAuth
                 _token = token;
                 HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_token.TokenType, _token.AccessToken);
             })
-                .OnBadRequest<dynamic>((d, statusCode, reasonPhrase) =>
+                .OnBadRequest<dynamic>((d, statusCode) =>
                 {
                     throw new Exception();
                 })

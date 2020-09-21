@@ -36,7 +36,7 @@ namespace TobyMeehan.OAuth.Models
                 {
                     success = true;
                 })
-                .OnBadRequest<object>((result, statusCode, reasonPhrase) =>
+                .OnBadRequest<object>((result, statusCode) =>
                 {
                     success = false;
                 })

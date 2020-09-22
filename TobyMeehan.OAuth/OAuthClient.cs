@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using TobyMeehan.Http;
 using TobyMeehan.OAuth.Data;
 using TobyMeehan.OAuth.Models;
@@ -20,6 +21,7 @@ namespace TobyMeehan.OAuth
         public OAuthClient()
         {
             HttpClient = new HttpClient();
+            _timer.Elapsed += async (sender, e) => await RefreshSession();
         }
 
         internal static HttpClient HttpClient { get; set; }
@@ -40,6 +42,16 @@ namespace TobyMeehan.OAuth
         public string RefreshToken => _token.RefreshToken;
 
         private JsonWebToken _token;
+
+        private Timer _timer = new Timer(1000 * 60 * 10)
+        {
+            AutoReset = true,
+            Enabled = true
+        };
+        private async Task RefreshSession()
+        {
+            await SignInAsync(RefreshToken);
+        }
 
         /// <summary>
         /// Signs in the user using the PKCE OAuth extension, and obtains an access token for use with further requests to the API.

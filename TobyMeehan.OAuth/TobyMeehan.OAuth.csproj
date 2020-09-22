@@ -21,14 +21,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TobyMeehan.Http" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TobyMeehan.Http" Version="2.0.0" />
   </ItemGroup>
 
 </Project>

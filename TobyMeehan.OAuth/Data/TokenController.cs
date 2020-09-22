@@ -38,5 +38,15 @@ namespace TobyMeehan.OAuth.Data
                 {"client_secret", secret }
             }));
         }
+
+        public IHttpRequest GetAccessTokenWithRefresh(string refreshToken, string clientId)
+        {
+            return _client.PostHttpContent(Config.TokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                {"grant_type", "refresh_token" },
+                {"refresh_token", refreshToken },
+                {"client_id", clientId }
+            }));
+        }
     }
 }

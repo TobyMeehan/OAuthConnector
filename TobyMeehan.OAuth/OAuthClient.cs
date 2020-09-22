@@ -34,6 +34,11 @@ namespace TobyMeehan.OAuth
         /// </summary>
         public AuthenticatedUser User { get; } = new AuthenticatedUser();
 
+        /// <summary>
+        /// The refresh token for the current session.
+        /// </summary>
+        public string RefreshToken => _token.RefreshToken;
+
         private JsonWebToken _token;
 
         /// <summary>
@@ -81,6 +86,18 @@ namespace TobyMeehan.OAuth
             await SignInAsync(tokenController.GetAccessTokenWithSecret(clientId, redirectUri, secret, authCode));
         }
 
+        /// <summary>
+        /// Signs in the user using a refresh token so that the user does not need to authorise again. This method is called regularly while the application is running to keep the user signed in.
+        /// </summary>
+        /// <param name="refreshToken">Refresh token to validate session.</param>
+        /// <returns></returns>
+        public async Task SignInAsync(string refreshToken)
+        {
+            var tokenController = new TokenController(HttpClient);
+
+            await SignInAsync(tokenController.GetAccessTokenWithRefresh(refreshToken, Application.Id));
+        }
+
         private async Task SignInAsync(IHttpRequest tokenRequest)
         {
             await tokenRequest.OnOK<JsonWebToken>((token) =>
@@ -88,10 +105,10 @@ namespace TobyMeehan.OAuth
                 _token = token;
                 HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_token.TokenType, _token.AccessToken);
             })
-                .OnBadRequest<dynamic>((d, statusCode) =>
-                {
-                    throw new Exception();
-                })
+            .OnBadRequest<dynamic>((obj, statusCode) =>
+            {
+                throw new Exception();
+            })
             .SendAsync();
 
             var accountController = new AccountController(HttpClient);

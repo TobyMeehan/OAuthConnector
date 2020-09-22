@@ -31,6 +31,8 @@ namespace Tester
 
             var user = await _client.GetSignedInUserAsync();
 
+            await _client.SignInAsync(_client.RefreshToken);
+
             Console.WriteLine($"Application Name: {_client.Application.Name}");
             Console.WriteLine($"Username: {user.Username}");
             Console.WriteLine($"Balance: {user.Balance}");

@@ -1,23 +1,14 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace TobyMeehan.OAuth.Models
 {
-    class JsonWebToken
+    public class JsonWebToken
     {
-        [JsonProperty(PropertyName = "access_token")]
-        public string AccessToken { get; set; }
-
-        [JsonProperty(PropertyName = "token_type")]
-        public string TokenType { get; set; }
-
-        [JsonProperty(PropertyName = "expires_in")]
-        public int ExpiresIn { get; set; }
-
-        [JsonProperty(PropertyName = "refresh_token")]
-        public string RefreshToken { get; set; }
-
+        public string access_token { get; set; }
+        public string token_type { get; set; }
+        public long expires_in { get; set; }
+        public string refresh_token { get; set; }
     }
 }

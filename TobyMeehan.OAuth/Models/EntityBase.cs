@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace TobyMeehan.OAuth.Models
@@ -9,19 +9,12 @@ namespace TobyMeehan.OAuth.Models
     /// <summary>
     /// Base class representing an entity.
     /// </summary>
-    public abstract class EntityBase
+    public abstract class EntityBase : IEntity
     {
-        protected readonly HttpClient _client;
-
-        public EntityBase()
-        {
-            _client = OAuthClient.HttpClient;
-        }
-
         /// <summary>
         /// Internal ID of the entity.
         /// </summary>
-        [JsonProperty]
+        [DataMember(Name = "id")]
         public string Id { get; protected set; }
 
         public override bool Equals(object obj)

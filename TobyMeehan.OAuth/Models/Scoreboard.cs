@@ -1,56 +1,46 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using TobyMeehan.OAuth.Data;
+using TobyMeehan.OAuth.Collections;
+using TobyMeehan.OAuth.Controllers;
 
 namespace TobyMeehan.OAuth.Models
 {
-    /// <summary>
-    /// Class representing an application scoreboard.
-    /// </summary>
-    public class Scoreboard
+    public class Scoreboard : IScoreboard
     {
-        private readonly HttpClient _client;
+        private readonly IScoreboardController _controller;
 
-        public Scoreboard()
+        public Scoreboard(IScoreboardController controller)
         {
-            _client = OAuthClient.HttpClient;
+            _controller = controller;
         }
 
-        [JsonProperty(PropertyName = "Objectives")]
-        private List<Objective> _objectives = new List<Objective>();
-        /// <summary>
-        /// All the objectives in the scoreboard.
-        /// </summary>
-        [JsonIgnore]
-        public IReadOnlyList<Objective> Objectives => _objectives.AsReadOnly();
-
-        [JsonProperty(PropertyName = "Scores")]
-        private List<Score> _scores = new List<Score>();
-        /// <summary>
-        /// The scores for each objective and user.
-        /// </summary>
-        [JsonIgnore]
-        public IReadOnlyList<Score> Scores => _scores.AsReadOnly(); 
-
-        /// <summary>
-        /// Creates a new objective with the specified name.
-        /// </summary>
-        /// <param name="name">Name of the new objective.</param>
-        /// <returns></returns>
-        public async Task CreateObjectiveAsync(string name)
+        public static async Task<Scoreboard> CreateAsync(IScoreboardController controller, CancellationToken cancellationToken)
         {
-            var scoreboardController = new ScoreboardController(_client);
-
-            await scoreboardController.CreateObjective(name)
-                .OnOK<Objective>((result) =>
-                {
-                    _objectives.Add(result);
-                })
-                .SendAsync();
+            return new Scoreboard(controller)
+            {
+                Objectives = await controller.GetAsync(cancellationToken)
+            };
         }
+
+        public async Task<IObjective> CreateObjectiveAsync(string name, CancellationToken cancellationToken = default)
+        {
+            var objective = await _controller.PostAsync(name, cancellationToken);
+
+            (Objectives as EntityCollection<IObjective>)?.Add(objective);
+
+            return objective;
+        }
+
+        public async Task DeleteObjectiveAsync(IObjective objective, CancellationToken cancellationToken = default)
+        {
+            await _controller.DeleteAsync(objective.Id, cancellationToken);
+
+            (Objectives as EntityCollection<IObjective>)?.Remove(objective);
+        }
+
+        public IEntityCollection<IObjective> Objectives { get; set; }
     }
 }
